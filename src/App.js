@@ -9,6 +9,7 @@ function App() {
         <FilterSideBar />
         <Catalog />
       </main>
+      <Footer />
     </>
   );
 }
@@ -22,7 +23,7 @@ function Header() {
           height: "40px",
           display: "flex",
           justifyContent: "Center",
-          gap: "350px",
+          gap: "",
         }}
       >
         <img src="logo.png" height="30" width="160" alt="Jenson Audio logo" />
@@ -41,6 +42,7 @@ const headerButtonArray = [
   { Name: "Home" },
   { Name: "About" },
   { Name: "Contact" },
+  { Name: "Request a demo" },
 ];
 
 function HeaderButton() {
@@ -53,23 +55,29 @@ const FakeCatalogData = [
   {
     Image: "product1.jpg",
     ProductName: "Product1",
-    ShortDesc: "Short Description 1",
+    ShortDesc: "Price 1",
   },
   {
     Image: "product2.jpg",
     ProductName: "Product2",
-    ShortDesc: "Short Description 2",
+    ShortDesc: "Price 2",
   },
   {
     Image: "product3.jpg",
     ProductName: "Product3",
-    ShortDesc: "Short Description 3",
+    ShortDesc: "Price 3",
   },
 ];
 
 function Catalog() {
   return (
-    <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
+    <section
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr",
+        backgroundColor: "lightgray",
+      }}
+    >
       {FakeCatalogData.map(({ Image, ProductName, ShortDesc }) => (
         <div>
           <ProductCell
@@ -110,8 +118,9 @@ const FilterButtonArray = [
 
 function FilterSideBar() {
   return (
-    <aside>
+    <aside style={{ backgroundColor: "silver" }}>
       <ul style={{ listStyle: "None" }}>
+        Filters:
         {FilterButtonArray.map(({ Name }) => (
           <li>
             <FilterButton Name={Name} />
@@ -124,6 +133,23 @@ function FilterSideBar() {
 
 function FilterButton({ Name }) {
   return <button>{Name}</button>;
+}
+
+function Footer() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "lightslategray",
+      }}
+    >
+      <h2 style={{ width: "300px" }}>
+        33 Ubi Ave 3, Vertex 02-12, Singapore 408868
+      </h2>
+      <p>jenson_audio@yahoo.com.sg</p>
+    </div>
+  );
 }
 
 export default App;
