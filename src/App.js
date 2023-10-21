@@ -4,9 +4,9 @@ function App() {
   return (
     <>
       <Header />
-      {/* <ProductCell /> */}
+      <Banner />
       <main style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
-        <FilterSideBar />
+        <SideBar />
         <Catalog />
       </main>
       <Footer />
@@ -19,19 +19,19 @@ function Header() {
     <>
       <header
         style={{
-          backgroundColor: "#3b82f6",
+          backgroundColor: "lightsteelblue",
           height: "40px",
           display: "flex",
           justifyContent: "Center",
-          gap: "",
+          gap: "250px",
         }}
       >
-        <img src="logo.png" height="30" width="160" alt="Jenson Audio logo" />
+        <img src="jenson.jpg" height="30" width="160" alt="Jenson Audio logo" />
         <div>
           <HeaderButton />
         </div>
         <form>
-          <input type="text" placeholder="Search product..."></input>
+          <input type="text" placeholder="Search product..." style={{}}></input>
         </form>
       </header>
     </>
@@ -47,8 +47,34 @@ const headerButtonArray = [
 
 function HeaderButton() {
   return headerButtonArray.map((headerButtonArray) => (
-    <button>{headerButtonArray.Name}</button>
+    <button style={{ marginLeft: 15, marginRight: 15, border: "" }}>
+      {headerButtonArray.Name}
+    </button>
   ));
+}
+
+function Banner() {
+  return (
+    <div
+      style={{
+        backgroundImage: `url("backgroundBanner.jpg")`,
+        height: "220px",
+        width: "1250px",
+        textAlign: "center",
+        paddingTop: "150px",
+        fontSize: "55px",
+        color: "white",
+      }}
+    >
+      Welcome to Jenson Audio!
+      <p style={{ fontSize: "20px" }}>
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry's standard dummy text ever
+        since the 1500s, when an unknown printer took a galley of type and
+        scrambled it to make a type specimen book.
+      </p>
+    </div>
+  );
 }
 
 const FakeCatalogData = [
@@ -66,6 +92,16 @@ const FakeCatalogData = [
     Image: "product3.jpg",
     ProductName: "Product3",
     ShortDesc: "Price 3",
+  },
+  {
+    Image: "product3.jpg",
+    ProductName: "Product4",
+    ShortDesc: "Price 4",
+  },
+  {
+    Image: "product3.jpg",
+    ProductName: "Product5",
+    ShortDesc: "Price 5",
   },
 ];
 
@@ -116,23 +152,40 @@ const FilterButtonArray = [
   { Name: "Cables" },
 ];
 
-function FilterSideBar() {
+function SideBar() {
   return (
-    <aside style={{ backgroundColor: "silver" }}>
-      <ul style={{ listStyle: "None" }}>
-        Filters:
-        {FilterButtonArray.map(({ Name }) => (
-          <li>
-            <FilterButton Name={Name} />
-          </li>
-        ))}
-      </ul>
+    <aside
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "silver",
+      }}
+    >
+      <FilterBar />
+      <EmbedFacebook />
     </aside>
+  );
+}
+
+function FilterBar() {
+  return (
+    <ul style={{ listStyle: "None" }}>
+      Filters:
+      {FilterButtonArray.map(({ Name }) => (
+        <li>
+          <FilterButton Name={Name} />
+        </li>
+      ))}
+    </ul>
   );
 }
 
 function FilterButton({ Name }) {
   return <button>{Name}</button>;
+}
+
+function EmbedFacebook() {
+  return <p>Space to embed facebook/carousell page</p>;
 }
 
 function Footer() {
