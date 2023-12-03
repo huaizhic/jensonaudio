@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.addProduct {
+  background-color: #d97706;
+}
