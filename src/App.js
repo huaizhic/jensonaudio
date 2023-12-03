@@ -7,12 +7,15 @@ import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 import CatalogList from "./CatalogList";
 import AddProductForm from "./AddProductForm";
+import DeleteProductForm from "./DeleteProductForm";
 
 function App() {
   const [catalog, setCatalog] = useState([]);
   const [productTitle, setProductTitle] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productCategory, setProductCategory] = useState("");
+  const [deleteList, setDeleteList] = useState([]);
+  const [deleteCheckbox, setDeleteCheckbox] = useState(false);
 
   return (
     <>
@@ -27,6 +30,13 @@ function App() {
         setProductPrice={setProductPrice}
         productCategory={productCategory}
         setProductCategory={setProductCategory}
+      />
+      <DeleteProductForm
+        catalog={catalog}
+        deleteCheckbox={deleteCheckbox}
+        setDeleteCheckbox={setDeleteCheckbox}
+        deleteList={deleteList}
+        setDeleteList={setDeleteList}
       />
       <main style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
         <Sidebar />

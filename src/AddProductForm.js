@@ -60,7 +60,7 @@ function AddProductForm({
               <option value={category.name}>{category.name}</option>
             ))}
           </select>
-          <button>Submit</button>
+          <button>Add</button>
         </form>
       </div>
     </>
