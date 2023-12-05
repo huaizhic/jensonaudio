@@ -2,25 +2,39 @@ import { useEffect } from "react";
 import supabase from "./supabase";
 
 function DeleteProductForm({ setCatalog, catalog }) {
-  // display checkbox for user to tick which product to delete
-  // are you sure warning
-  // deletes selected products from supabase
-  // retrieve updated catalog from supabase
-
   async function handleSubmit(e) {
     // prevent broswer reload
     e.preventDefault();
+
     // display warning message
-    // if nothing is checked, display nothing is checked and stop there
+    const isAnyChecked = catalog.some((product) => {
+      if (product.deleteCheck === true) {
+        return true;
+      }
+      return false;
+    });
+    // console.log(isAnyChecked);
 
-    // delete on supabase
-    const { error } = await supabase
-      .from("CatalogList")
-      .delete()
-      .eq("deleteCheck", true);
+    if (isAnyChecked === false) {
+      // meaning none of the checkboxes are checked
+      alert("You have not selected any checkboxes for deletion!");
+    } else {
+      const response = window.confirm(
+        "Confirm deletion. This action is irreversible"
+      ); // boolean
+      if (response === false) {
+      } else {
+        // delete on supabase
+        const { error } = await supabase
+          .from("CatalogList")
+          .delete()
+          .eq("deleteCheck", true);
 
-    // delete on local UI
-    setCatalog(catalog.filter((product) => product.deleteCheck === false));
+        // delete on local UI
+        setCatalog(catalog.filter((product) => product.deleteCheck === false));
+        alert("Deleted!");
+      }
+    }
   }
 
   async function handleCheckbox(product) {
