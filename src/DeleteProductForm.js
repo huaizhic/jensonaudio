@@ -1,16 +1,7 @@
 import { useEffect } from "react";
 import supabase from "./supabase";
 
-function DeleteProductForm({
-  product,
-  productTitle,
-  setCatalog,
-  catalog,
-  deleteList,
-  setDeleteList,
-  deleteCheckBox,
-  setDeleteCheckbox,
-}) {
+function DeleteProductForm({ setCatalog, catalog }) {
   // display checkbox for user to tick which product to delete
   // are you sure warning
   // deletes selected products from supabase
@@ -19,6 +10,9 @@ function DeleteProductForm({
   async function handleSubmit(e) {
     // prevent broswer reload
     e.preventDefault();
+    // display warning message
+    // if nothing is checked, display nothing is checked and stop there
+
     // delete on supabase
     const { error } = await supabase
       .from("CatalogList")

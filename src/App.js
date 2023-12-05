@@ -14,15 +14,12 @@ function App() {
   const [productTitle, setProductTitle] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productCategory, setProductCategory] = useState("");
-  const [deleteList, setDeleteList] = useState([]);
-  const [deleteCheckbox, setDeleteCheckbox] = useState(false);
 
   return (
     <>
       <Header />
       {/* <Banner /> */}
       <AddProductForm
-        catalog={catalog}
         setCatalog={setCatalog}
         productTitle={productTitle}
         setProductTitle={setProductTitle}
@@ -31,15 +28,7 @@ function App() {
         productCategory={productCategory}
         setProductCategory={setProductCategory}
       />
-      <DeleteProductForm
-        productTitle={productTitle}
-        setCatalog={setCatalog}
-        catalog={catalog}
-        deleteCheckbox={deleteCheckbox}
-        setDeleteCheckbox={setDeleteCheckbox}
-        deleteList={deleteList}
-        setDeleteList={setDeleteList}
-      />
+      <DeleteProductForm setCatalog={setCatalog} catalog={catalog} />
       <main style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
         <Sidebar />
         <CatalogList catalog={catalog} setCatalog={setCatalog} />

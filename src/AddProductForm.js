@@ -7,7 +7,6 @@ const FakeCategories = [
 ];
 
 function AddProductForm({
-  catalog,
   setCatalog,
   productTitle,
   setProductTitle,
