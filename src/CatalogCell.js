@@ -1,4 +1,4 @@
-function CatalogCell({ Image, productTitle, productPrice, productCategory }) {
+function CatalogCell({ product, productTitle, productPrice, productCategory }) {
   // console.log({ FakeCatalogData.ProductName });
   return (
     <div
@@ -11,9 +11,10 @@ function CatalogCell({ Image, productTitle, productPrice, productCategory }) {
       }}
     >
       {/* <img src={Image} height="250" width="250" /> */}
-      <h1>{productTitle}</h1>
-      <span>{productPrice}</span>
-      <span>{productCategory}</span>
+      <h1>{product.productTitle}</h1>
+      <span>{product.productPrice}</span>
+      <span>{product.productCategory}</span>
+      <span>{product.deleteCheck}</span>
     </div>
   );
 }

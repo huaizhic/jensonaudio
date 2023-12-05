@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import supabase from "./supabase";
 
 function DeleteProductForm({
+  product,
+  productTitle,
+  setCatalog,
   catalog,
   deleteList,
   setDeleteList,
@@ -16,59 +19,54 @@ function DeleteProductForm({
   async function handleSubmit(e) {
     // prevent broswer reload
     e.preventDefault();
-    const finalDeleteList = catalog.map(({ productTitle }) => {
-      if (deleteCheckBox === true) {
-        setDeleteList([...deleteList, { name: productTitle }]);
-      }
-    });
-    // setDeleteList(finalDeleteList);
-    // console.log(deleteList);
-    console.log(finalDeleteList);
+    // delete on supabase
+    const { error } = await supabase
+      .from("CatalogList")
+      .delete()
+      .eq("deleteCheck", true);
+
+    // delete on local UI
+    setCatalog(catalog.filter((product) => product.deleteCheck === false));
   }
 
-  async function handleCheckbox(name, booleanParam) {
-    // setDeleteCheckbox(!booleanParam);
-    // // console.log(!booleanParam);
-    // console.log(deleteCheckBox);
-    // AS SET STATE IS ASYNC FUNCTION, NORMAL CONSOLE LOG WILL NOT BE ABLE TO GIVE ACCURATE RESPONSE.
-    // USE REACT COMPONENTS TOOL INSTEAD
+  async function handleCheckbox(product) {
+    // console.log(product);
+    // to reflect changes in supabase (WORKS NOW!!!)
+    const { data: updatedProduct, error } = await supabase
+      .from("CatalogList")
+      .update({ deleteCheck: !product.deleteCheck })
+      .eq("id", product.id)
+      .select();
 
-    //current problem is that value={deleteCheckBox} is not updating, so the boolean passed into this function is always false.
+    // console.log(updatedProduct);
+    // console.log(updatedProduct[0]);
 
-    if (booleanParam) {
-      // this scenario is never executed as deleteCheckBox is never updated to false
-      setDeleteList(
-        deleteList.filter((product) => product.name !== deleteList.name)
-      );
-    } else {
-      // this scenario works as intended, don't touch
-      setDeleteList([
-        ...deleteList,
-        { name: name, deleteCheck: !booleanParam },
-      ]);
-      // setDeleteCheckbox(!booleanParam); // this does not work for some reason
-    }
-    // setDeleteCheckbox(!booleanParam); // this does not work for some reason
-    // console.log(deleteList);
+    // to reflect in local UI (WORKS NOW!!!)    (note: use updatedProduct[0] because updatedProduct is array of an obj)
+    setCatalog(
+      catalog.map((product) =>
+        updatedProduct[0].id === product.id ? updatedProduct[0] : product
+      )
+    );
   }
 
   return (
     <>
       <div className="deleteProduct">
-        <h2>Delete existing product(s) (not working yet)</h2>
+        <h2>Delete existing product(s)</h2>
         <form onSubmit={handleSubmit}>
-          {catalog.map(({ productTitle }) => (
+          {catalog.map((product) => (
             <div>
               <input
                 type="checkbox"
-                // name={productTitle}
-                value={deleteCheckBox}
-                onChange={() => handleCheckbox(productTitle, deleteCheckBox)}
+                key={product.id}
+                product={product}
+                checked={product.deleteCheck}
+                onChange={() => handleCheckbox(product)}
               ></input>
-              <label>{productTitle}</label>
+              <label>{product.productTitle}</label>
             </div>
           ))}
-          <button>Console log</button>
+          <button>Delete</button>
         </form>
       </div>
     </>

@@ -32,6 +32,8 @@ function App() {
         setProductCategory={setProductCategory}
       />
       <DeleteProductForm
+        productTitle={productTitle}
+        setCatalog={setCatalog}
         catalog={catalog}
         deleteCheckbox={deleteCheckbox}
         setDeleteCheckbox={setDeleteCheckbox}
