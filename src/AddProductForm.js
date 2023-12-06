@@ -45,10 +45,10 @@ function AddProductForm({
             onChange={(e) => setProductTitle(e.target.value)}
           />
           <input
-            type="text"
+            type="number"
             placeholder="Price"
             value={productPrice}
-            onChange={(e) => setProductPrice(e.target.value)}
+            onChange={(e) => setProductPrice(e.target.valueAsNumber)}
           />
           <select
             value={productCategory}

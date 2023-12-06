@@ -15,9 +15,11 @@ function App() {
   const [productTitle, setProductTitle] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productCategory, setProductCategory] = useState("");
-  const [productEdit, setProductEdit] = useState([
-    { productTitle: null, productPrice: null, productCategory: null },
-  ]);
+  const [productEdit, setProductEdit] = useState({
+    productTitle: null,
+    productPrice: null,
+    productCategory: null,
+  });
 
   return (
     <>

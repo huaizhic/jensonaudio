@@ -18,35 +18,47 @@ function EditProductForm({ setCatalog, catalog, productEdit, setProductEdit }) {
 
     // fill input boxes with current product info
     if (productName === "Choose product") {
-      setProductEdit([
-        { productTitle: null, productPrice: null, productCategory: null },
-      ]);
+      setProductEdit({
+        productTitle: null,
+        productPrice: null,
+        productCategory: null,
+      });
     } else {
-      setProductEdit(
-        catalog.filter((product) => product.productTitle === productName) // works
+      const arrayOfObject = catalog.filter(
+        (product) => product.productTitle === productName
       );
+      setProductEdit(arrayOfObject[0]); // arrayOfObject[0] is an object type (of the specified product)
     }
   }
 
   function EditingPanel() {
     return (
-      <form onSubmit={handleSubmit} key={productEdit[0].id}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="New Product Name"
-          value={productEdit[0].productTitle}
-          // whenever the user updates the input box, onChange will be triggered, setting the state of productTitle
-          //   onChange={(e) => setProductTitle(e.target.value)}
+          value={productEdit.productTitle}
+          onChange={
+            (e) =>
+              setProductEdit({ ...productEdit, productTitle: e.target.value }) // editing attribute in object
+          }
         />
         <input
-          type="text"
+          type="number"
           placeholder="New Price"
-          value={productEdit[0].productPrice}
-          //   onChange={(e) => setProductPrice(e.target.value)}
+          value={productEdit.productPrice}
+          onChange={(e) =>
+            setProductEdit({
+              ...productEdit,
+              productPrice: e.target.valueAsNumber,
+            })
+          }
         />
         <select
-          value={productEdit[0].productCategory}
-          //   onChange={(e) => setProductCategory(e.target.value)}
+          value={productEdit.productCategory}
+          onChange={(e) =>
+            setProductEdit({ ...productEdit, productCategory: e.target.value })
+          }
         >
           <option value="">Choose new category</option>
           {FakeCategories.map((category) => (
