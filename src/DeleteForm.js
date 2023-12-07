@@ -59,80 +59,97 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
   async function handleCategorySubmit(e) {
     e.preventDefault();
 
-    // get array of category objects to be deleted (WORKS)
-
+    // get array of categories to be deleted (each category comes as an object)
     const categoryDeleteArray = categoryList.filter(
       (object) => object.deleteCheck === true
     );
-    console.log(categoryDeleteArray);
+    // console.log(categoryDeleteArray);
 
     const sizeCategoryDeleteArray = categoryDeleteArray.length;
     // console.log(sizeCategoryDeleteArray);
 
-    // update CategoryList in supabase
-    for (let i = 0; i < sizeCategoryDeleteArray; i++) {
-      const { error } = await supabase.from("CategoryList").upsert({
-        id: categoryDeleteArray[i].id,
-        deleteCheck: categoryDeleteArray[i].deleteCheck,
-      });
-    }
-
-    // delete category from CategoryList in supabase
-    const { error } = await supabase
-      .from("CategoryList")
-      .delete()
-      .eq("deleteCheck", true);
-
-    // reflect deletion of category from supabase to local UI
-    setCategoryList(
-      categoryList.filter((object) => object.deleteCheck === false)
-    );
-
-    const productsFromDeletedCategoryArray = []; // array of array of object
-
-    for (let j = 0; j < sizeCategoryDeleteArray; j++) {
-      productsFromDeletedCategoryArray.push(
-        catalog.filter(
-          (product) =>
-            product.productCategory === categoryDeleteArray[j].category
-        )
+    if (sizeCategoryDeleteArray === 0) {
+      alert("You have not selected any checkboxes yet!");
+    } else {
+      const response = window.confirm(
+        'Confirm deletion of categorie(s). This action is irreversible.  \n\nNOTE: Products of deleted categorie(s) will be automatically re-assigned the default category "Others".'
       );
-    }
 
-    console.log(productsFromDeletedCategoryArray);
+      if (response) {
+        // update CategoryList in supabase
+        for (let i = 0; i < sizeCategoryDeleteArray; i++) {
+          const { error } = await supabase.from("CategoryList").upsert({
+            id: categoryDeleteArray[i].id,
+            deleteCheck: categoryDeleteArray[i].deleteCheck,
+          });
+        }
 
-    // convert productsFromDeletedCategoryArray to array of objects
-    const sizeProductsFromDeletedCategoryArray =
-      productsFromDeletedCategoryArray.length;
+        // delete category from CategoryList in supabase
+        const { error } = await supabase
+          .from("CategoryList")
+          .delete()
+          .eq("deleteCheck", true);
 
-    let idProductsofDeletedCat = [];
+        // reflect deletion of category from supabase to local UI
+        setCategoryList(
+          categoryList.filter((object) => object.deleteCheck === false)
+        );
 
-    for (let k = 0; k < sizeProductsFromDeletedCategoryArray; k++) {
-      let sizeInnerArray = productsFromDeletedCategoryArray[k].length;
-      for (let q = 0; q < sizeInnerArray; q++) {
-        idProductsofDeletedCat.push(productsFromDeletedCategoryArray[k][q].id);
-        // console.log(productsFromDeletedCategoryArray[k][q].id);
+        const productsFromDeletedCategoryArray = []; // array of array of object (each inner array to represent a category, as a category can have multiple products)
+
+        for (let j = 0; j < sizeCategoryDeleteArray; j++) {
+          productsFromDeletedCategoryArray.push(
+            catalog.filter(
+              (product) =>
+                product.productCategory === categoryDeleteArray[j].category
+            )
+          );
+        }
+
+        // console.log(productsFromDeletedCategoryArray);
+
+        // convert productsFromDeletedCategoryArray to array of objects
+        const sizeProductsFromDeletedCategoryArray =
+          productsFromDeletedCategoryArray.length;
+
+        let idProductsofDeletedCat = [];
+
+        for (let k = 0; k < sizeProductsFromDeletedCategoryArray; k++) {
+          let sizeInnerArray = productsFromDeletedCategoryArray[k].length;
+          for (let q = 0; q < sizeInnerArray; q++) {
+            idProductsofDeletedCat.push(
+              productsFromDeletedCategoryArray[k][q].id
+            );
+            // console.log(productsFromDeletedCategoryArray[k][q].id);
+          }
+        }
+
+        // console.log(idProductsofDeletedCat);
+
+        let sizeIdArray = idProductsofDeletedCat.length;
+
+        // apend products with deleted category to default 'others' category in supabase
+        for (let m = 0; m < sizeIdArray; m++) {
+          const { error } = await supabase.from("CatalogList").upsert({
+            id: idProductsofDeletedCat[m],
+            productCategory: "Others",
+          });
+        }
+
+        // reflect changes in local UI
+        let counter = 0;
+        while (counter <= sizeIdArray) {
+          setCatalog(
+            catalog.map((product) =>
+              product.id === idProductsofDeletedCat[counter]
+                ? (product.productCategory = "Others")
+                : product
+            )
+          );
+          counter++;
+        }
+        counter = 0; // reset counter back to 0
       }
-    }
-
-    console.log(idProductsofDeletedCat);
-
-    let sizeIdArray = idProductsofDeletedCat.length;
-
-    // apend products with deleted category to default 'others' category in supabase
-    for (let m = 0; m < sizeIdArray; m++) {
-      const { error } = await supabase.from("CatalogList").upsert({
-        id: idProductsofDeletedCat[m],
-        productCategory: "Others",
-      });
-      // reflect changes in local UI  (buggy)
-      setCatalog(
-        catalog.map((product) =>
-          product.id === idProductsofDeletedCat[m]
-            ? (product.productCategory = "Others")
-            : product
-        )
-      );
     }
   }
 
@@ -152,6 +169,10 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
     <>
       <div className="deleteForm">
         <h2>Delete existing product(s)</h2>
+        <p>
+          Note: Checkboxes are persistent even after refresh, as they are tied
+          to the database.
+        </p>
         <form className="deleteProductForm" onSubmit={handleProductSubmit}>
           <div className="scrollDeleteProduct">
             {catalog.map((product) => (
@@ -170,7 +191,7 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
           <button>Delete</button>
         </form>
         <form onSubmit={handleCategorySubmit}>
-          <h2>Delete existing category (building in progress)</h2>
+          <h2>Delete existing category</h2>
           <p>
             Idea: Categories with no products attached to them will simply be
             deleted.
