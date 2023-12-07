@@ -62,6 +62,7 @@ function EditProductForm({ setCatalog, catalog, productEdit, setProductEdit }) {
       if (
         inputTitle === "" ||
         Number.isNaN(inputPrice) ||
+        inputPrice === "" ||
         inputCategory === ""
       ) {
         alert("You have not filled in all the blanks!");

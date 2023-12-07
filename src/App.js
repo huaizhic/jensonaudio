@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import supabase from "./supabase";
 import "./style.css";
 import FakeCatalogData from "./CatalogList";
 import Banner from "./Banner";
@@ -6,7 +7,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 import CatalogList from "./CatalogList";
-import AddProductForm from "./AddProductForm";
+import AddForm from "./AddForm";
 import DeleteProductForm from "./DeleteProductForm";
 import EditProductForm from "./EditProductForm";
 
@@ -20,13 +21,26 @@ function App() {
     productPrice: null,
     productCategory: null,
   });
+  const [categoryList, setcategoryList] = useState([1, 2]); // array of objects from supabase
+
+  // for fetching categoryList from supabase
+  useEffect(function () {
+    async function getCategoryList() {
+      const { data: Categories, error } = await supabase
+        .from("CategoryList")
+        .select("*");
+      setcategoryList(Categories);
+      // console.log(categoryList);
+    }
+    getCategoryList();
+  }, []);
 
   return (
     <>
       <Header />
       {/* <Banner /> */}
       <div style={{ display: "flex" }}>
-        <AddProductForm
+        <AddForm
           setCatalog={setCatalog}
           productTitle={productTitle}
           setProductTitle={setProductTitle}
@@ -34,6 +48,8 @@ function App() {
           setProductPrice={setProductPrice}
           productCategory={productCategory}
           setProductCategory={setProductCategory}
+          categoryList={categoryList}
+          setcategoryList={setcategoryList}
         />
         <DeleteProductForm setCatalog={setCatalog} catalog={catalog} />
         <EditProductForm
