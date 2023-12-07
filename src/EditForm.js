@@ -7,7 +7,7 @@ const FakeCategories = [
   { name: "Cables" },
 ];
 
-function EditProductForm({
+function EditForm({
   setCatalog,
   catalog,
   productEdit,
@@ -172,9 +172,12 @@ function EditProductForm({
           </select>
           <button>Update</button>
         </form>
+        <form>
+          <h2>Editing existing category name (building in progress)</h2>
+        </form>
       </div>
     </>
   );
 }
 
-export default EditProductForm;
+export default EditForm;

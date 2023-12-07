@@ -57,3 +57,9 @@
   height: 200px;
   overflow: scroll;
 }
+
+.scrollDeleteCategory {
+  background-color: #f87171;
+  height: 130px;
+  overflow: scroll;
+}

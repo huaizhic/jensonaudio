@@ -8,8 +8,8 @@ import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 import CatalogList from "./CatalogList";
 import AddForm from "./AddForm";
-import DeleteProductForm from "./DeleteProductForm";
-import EditProductForm from "./EditProductForm";
+import DeleteForm from "./DeleteForm";
+import EditForm from "./EditForm";
 
 function App() {
   const [catalog, setCatalog] = useState([]);
@@ -52,8 +52,13 @@ function App() {
           categoryList={categoryList}
           setCategoryList={setCategoryList}
         />
-        <DeleteProductForm setCatalog={setCatalog} catalog={catalog} />
-        <EditProductForm
+        <DeleteForm
+          setCatalog={setCatalog}
+          catalog={catalog}
+          categoryList={categoryList}
+          setCategoryList={setCategoryList}
+        />
+        <EditForm
           setCatalog={setCatalog}
           catalog={catalog}
           productEdit={productEdit}

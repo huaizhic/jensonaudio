@@ -7,7 +7,7 @@
 function FilterBar({ categoryList, setCategoryList }) {
   return (
     <ul style={{ listStyle: "None" }}>
-      Filters:
+      Filter by Category:
       {categoryList.map((object) => (
         <li>
           <button>{object.category}</button>
