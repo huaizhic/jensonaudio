@@ -95,8 +95,10 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
           categoryList.filter((object) => object.deleteCheck === false)
         );
 
-        const productsFromDeletedCategoryArray = []; // array of array of object (each inner array to represent a category, as a category can have multiple products)
-
+        // create array of products that are affected by the deleted categories
+        const productsFromDeletedCategoryArray = [];
+        // array of array of object (each inner array to represent a category, as a category can have multiple products)
+        // example format: [[{products for deleted category 1}],[{products for deleted category 2}]]
         for (let j = 0; j < sizeCategoryDeleteArray; j++) {
           productsFromDeletedCategoryArray.push(
             catalog.filter(
@@ -105,10 +107,10 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
             )
           );
         }
-
         // console.log(productsFromDeletedCategoryArray);
 
-        // convert productsFromDeletedCategoryArray to array of objects
+        // convert productsFromDeletedCategoryArray to array of objects by taking just the id
+        // example format: [id of product 1, id of product 2, ...] (note: category of product doesn't matter, can mix)
         const sizeProductsFromDeletedCategoryArray =
           productsFromDeletedCategoryArray.length;
 
@@ -128,7 +130,7 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
 
         let sizeIdArray = idProductsofDeletedCat.length;
 
-        // apend products with deleted category to default 'others' category in supabase
+        // apend products from deleted categories to default 'others' category in supabase
         for (let m = 0; m < sizeIdArray; m++) {
           const { error } = await supabase.from("CatalogList").upsert({
             id: idProductsofDeletedCat[m],
@@ -148,7 +150,7 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
           );
           counter++;
         }
-        counter = 0; // reset counter back to 0
+        counter = 0; // reset counter back to 0 just in case
       }
     }
   }

@@ -175,6 +175,9 @@ function EditForm({
         <form>
           <h2>Editing existing category name (building in progress)</h2>
         </form>
+        <form>
+          <h2>Mass change product category (building in progress)</h2>
+        </form>
       </div>
     </>
   );
