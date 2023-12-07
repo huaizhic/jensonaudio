@@ -1,18 +1,16 @@
-import FilterButton from "./FilterButton";
+// const FilterButtonArray = [
+//   { Name: "Speakers" },
+//   { Name: "Preamps" },
+//   { Name: "Cables" },
+// ];
 
-const FilterButtonArray = [
-  { Name: "Speakers" },
-  { Name: "Preamps" },
-  { Name: "Cables" },
-];
-
-function FilterBar() {
+function FilterBar({ categoryList, setCategoryList }) {
   return (
     <ul style={{ listStyle: "None" }}>
       Filters:
-      {FilterButtonArray.map(({ Name }) => (
+      {categoryList.map((object) => (
         <li>
-          <FilterButton Name={Name} />
+          <button>{object.category}</button>
         </li>
       ))}
     </ul>

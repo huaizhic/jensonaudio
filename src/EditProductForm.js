@@ -7,7 +7,14 @@ const FakeCategories = [
   { name: "Cables" },
 ];
 
-function EditProductForm({ setCatalog, catalog, productEdit, setProductEdit }) {
+function EditProductForm({
+  setCatalog,
+  catalog,
+  productEdit,
+  setProductEdit,
+  categoryList,
+  setCategoryList,
+}) {
   const [inputTitle, setInputTitle] = useState("");
   const [inputPrice, setInputPrice] = useState("");
   const [inputCategory, setInputCategory] = useState("");
@@ -159,8 +166,8 @@ function EditProductForm({ setCatalog, catalog, productEdit, setProductEdit }) {
             onChange={(e) => setInputCategory(e.target.value)}
           >
             <option value="">Choose new category</option>
-            {FakeCategories.map((category) => (
-              <option value={category.name}>{category.name}</option>
+            {categoryList.map((object) => (
+              <option value={object.category}>{object.category}</option>
             ))}
           </select>
           <button>Update</button>

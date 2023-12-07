@@ -1,7 +1,7 @@
 import FilterBar from "./FilterBar";
 import EmbedFacebook from "./EmbedFacebook";
 
-function Sidebar() {
+function Sidebar({ categoryList, setCategoryList }) {
   return (
     <aside
       style={{
@@ -10,7 +10,10 @@ function Sidebar() {
         backgroundColor: "silver",
       }}
     >
-      <FilterBar />
+      <FilterBar
+        categoryList={categoryList}
+        setCategoryList={setCategoryList}
+      />
       <EmbedFacebook />
     </aside>
   );

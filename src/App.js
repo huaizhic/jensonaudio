@@ -21,7 +21,7 @@ function App() {
     productPrice: null,
     productCategory: null,
   });
-  const [categoryList, setcategoryList] = useState([1, 2]); // array of objects from supabase
+  const [categoryList, setCategoryList] = useState([]); // array of objects from supabase
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -29,7 +29,7 @@ function App() {
       const { data: Categories, error } = await supabase
         .from("CategoryList")
         .select("*");
-      setcategoryList(Categories);
+      setCategoryList(Categories);
       // console.log(categoryList);
     }
     getCategoryList();
@@ -49,7 +49,7 @@ function App() {
           productCategory={productCategory}
           setProductCategory={setProductCategory}
           categoryList={categoryList}
-          setcategoryList={setcategoryList}
+          setCategoryList={setCategoryList}
         />
         <DeleteProductForm setCatalog={setCatalog} catalog={catalog} />
         <EditProductForm
@@ -57,11 +57,16 @@ function App() {
           catalog={catalog}
           productEdit={productEdit}
           setProductEdit={setProductEdit}
+          categoryList={categoryList}
+          setCategoryList={setCategoryList}
         />
       </div>
 
       <main style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
-        <Sidebar />
+        <Sidebar
+          categoryList={categoryList}
+          setCategoryList={setCategoryList}
+        />
         <CatalogList catalog={catalog} setCatalog={setCatalog} />
       </main>
       <Footer />

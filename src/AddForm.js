@@ -1,3 +1,4 @@
+import { useState } from "react";
 import supabase from "./supabase";
 
 // const FakeCategories = [
@@ -17,6 +18,8 @@ function AddForm({
   categoryList,
   setCategoryList,
 }) {
+  const [newCategoryInput, setNewCategoryInput] = useState("");
+
   async function handleProductSubmit(e) {
     // prevent broswer reload
     e.preventDefault();
@@ -43,6 +46,25 @@ function AddForm({
         setProductTitle("");
         setProductPrice("");
         setProductCategory("");
+      }
+    }
+  }
+
+  async function handleCategorySubmit(e) {
+    e.preventDefault();
+
+    if (newCategoryInput === "") {
+      alert("You have not typed in anything yet!");
+    } else {
+      const response = window.confirm("Confirm your choice");
+      if (response) {
+        const { data: newCategory, error } = await supabase
+          .from("CategoryList")
+          .insert([{ category: newCategoryInput }])
+          .select();
+
+        setCategoryList([...categoryList, newCategory[0]]); // not working, error: setState is not a function
+        setNewCategoryInput("");
       }
     }
   }
@@ -74,6 +96,16 @@ function AddForm({
               <option value={object.category}>{object.category}</option>
             ))}
           </select>
+          <button>Add</button>
+        </form>
+        <form onSubmit={handleCategorySubmit}>
+          <h2>Add new category</h2>
+          <input
+            type="text"
+            placeholder="New Category Name"
+            value={newCategoryInput}
+            onChange={(e) => setNewCategoryInput(e.target.value)}
+          ></input>
           <button>Add</button>
         </form>
       </div>
