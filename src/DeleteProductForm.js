@@ -58,21 +58,23 @@ function DeleteProductForm({ setCatalog, catalog }) {
 
   return (
     <>
-      <div className="deleteProduct">
+      <div className="deleteForm">
         <h2>Delete existing product(s)</h2>
-        <form onSubmit={handleSubmit}>
-          {catalog.map((product) => (
-            <div>
-              <input
-                type="checkbox"
-                key={product.id}
-                product={product}
-                checked={product.deleteCheck}
-                onChange={() => handleCheckbox(product)}
-              ></input>
-              <label>{product.productTitle}</label>
-            </div>
-          ))}
+        <form className="deleteProductForm" onSubmit={handleSubmit}>
+          <div className="scrollDeleteProduct">
+            {catalog.map((product) => (
+              <div>
+                <input
+                  type="checkbox"
+                  key={product.id}
+                  product={product}
+                  checked={product.deleteCheck}
+                  onChange={() => handleCheckbox(product)}
+                ></input>
+                <label>{product.productTitle}</label>
+              </div>
+            ))}
+          </div>
           <button>Delete</button>
         </form>
       </div>

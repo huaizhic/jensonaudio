@@ -41,10 +41,19 @@
   background-color: #d97706;
 }
 
-.deleteProduct {
+.deleteForm {
   background-color: #dc2626;
 }
 
 .editProduct {
   background-color: #fbbf24;
+}
+
+.deleteProductForm {
+}
+
+.scrollDeleteProduct {
+  background-color: #f87171;
+  height: 200px;
+  overflow: scroll;
 }
