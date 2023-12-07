@@ -8,6 +8,7 @@ import supabase from "./supabase";
 // ];
 
 function AddForm({
+  catalog,
   setCatalog,
   productTitle,
   setProductTitle,
@@ -32,20 +33,33 @@ function AddForm({
     ) {
       alert("Please fill in all the input fields!");
     } else {
-      const response = window.confirm("Please confirm details");
-      if (response) {
-        // upload newly submitted product to supabase, and retrieve it at the same time, naming it newProduct
-        const { data: newProduct, error } = await supabase
-          .from("CatalogList")
-          .insert([{ productTitle, productPrice, productCategory }])
-          .select();
-        // console.log(newProduct);
-        // reflect changes on local UI
-        setCatalog((catalog) => [newProduct[0], ...catalog]);
-        // reset form upon submission
-        setProductTitle("");
-        setProductPrice("");
-        setProductCategory("");
+      const gotDuplicateProduct = catalog.some((product) => {
+        if (product.productTitle === productTitle) {
+          return true;
+        }
+        return false;
+      });
+
+      if (gotDuplicateProduct) {
+        alert(
+          "The new product name you entered is already taken. Please enter a different one!"
+        );
+      } else {
+        const response = window.confirm("Please confirm details");
+        if (response) {
+          // upload newly submitted product to supabase, and retrieve it at the same time, naming it newProduct
+          const { data: newProduct, error } = await supabase
+            .from("CatalogList")
+            .insert([{ productTitle, productPrice, productCategory }])
+            .select();
+          // console.log(newProduct);
+          // reflect changes on local UI
+          setCatalog((catalog) => [newProduct[0], ...catalog]);
+          // reset form upon submission
+          setProductTitle("");
+          setProductPrice("");
+          setProductCategory("");
+        }
       }
     }
   }
@@ -57,14 +71,14 @@ function AddForm({
       alert("You have not typed in anything yet!");
     } else {
       // check if it is duplicate
-      const gotDuplicate = categoryList.some((object) => {
+      const gotDuplicateCategory = categoryList.some((object) => {
         if (object.category === newCategoryInput) {
           return true;
         }
         return false;
       });
 
-      if (gotDuplicate) {
+      if (gotDuplicateCategory) {
         alert("The category you typed in already exists!");
       } else {
         const response = window.confirm("Confirm your choice");

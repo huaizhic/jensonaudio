@@ -41,6 +41,7 @@ function App() {
       {/* <Banner /> */}
       <div style={{ display: "flex" }}>
         <AddForm
+          catalog={catalog}
           setCatalog={setCatalog}
           productTitle={productTitle}
           setProductTitle={setProductTitle}
