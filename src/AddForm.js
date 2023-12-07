@@ -56,15 +56,27 @@ function AddForm({
     if (newCategoryInput === "") {
       alert("You have not typed in anything yet!");
     } else {
-      const response = window.confirm("Confirm your choice");
-      if (response) {
-        const { data: newCategory, error } = await supabase
-          .from("CategoryList")
-          .insert([{ category: newCategoryInput }])
-          .select();
+      // check if it is duplicate
+      const gotDuplicate = categoryList.some((object) => {
+        if (object.category === newCategoryInput) {
+          return true;
+        }
+        return false;
+      });
 
-        setCategoryList([...categoryList, newCategory[0]]); // not working, error: setState is not a function
-        setNewCategoryInput("");
+      if (gotDuplicate) {
+        alert("The category you typed in already exists!");
+      } else {
+        const response = window.confirm("Confirm your choice");
+        if (response) {
+          const { data: newCategory, error } = await supabase
+            .from("CategoryList")
+            .insert([{ category: newCategoryInput }])
+            .select();
+
+          setCategoryList([...categoryList, newCategory[0]]); // not working, error: setState is not a function
+          setNewCategoryInput("");
+        }
       }
     }
   }
