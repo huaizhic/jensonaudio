@@ -17,7 +17,11 @@ function Header() {
           <HeaderButton />
         </div>
         <form>
-          <input type="text" placeholder="Search product..." style={{}}></input>
+          <input
+            type="text"
+            placeholder="Search product...(not working yet)"
+            style={{}}
+          ></input>
         </form>
       </header>
     </>

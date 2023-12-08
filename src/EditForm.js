@@ -18,14 +18,20 @@ function EditForm({
   const [inputTitle, setInputTitle] = useState("");
   const [inputPrice, setInputPrice] = useState("");
   const [inputCategory, setInputCategory] = useState("");
-  const [updatedFlag, setUpdatedFlag] = useState(false);
-  const [dropdownValue, setDropdownValue] = useState("Choose product");
+  const [updatedFlag, setUpdatedFlag] = useState(false); // useEffect flag for editing product details
+  const [updatedFlag1, setUpdatedFlag1] = useState(false); // useEffect flag for editing category name
+  const [dropdownValue, setDropdownValue] = useState("Choose product"); // to reset dropdown for edit product after submission
+  const [dropdownValue1, setDropdownValue1] = useState(""); // to reset dropdown for edit category after submission
+  const [newCategory, setNewCategory] = useState(""); // for editing category name
+  const [categoryEdit, setCategoryEdit] = useState(""); // for storing old category name
 
+  // for proper re-rendering after editing product details
   useEffect(
     function () {
       async function updateCatalog() {
         // console.log(productEdit.productTitle);
         if (
+          // use an if condition as the updatedFlag gets changed twice every refresh, triggering the useEffect unexpectedly
           productEdit.productTitle !== null &&
           productEdit.productPrice !== null &&
           productEdit.productCategory !== null
@@ -58,7 +64,58 @@ function EditForm({
     [updatedFlag]
   );
 
-  // have to click button twice for it to work
+  // for proper rerendering after editing category name
+  useEffect(
+    function () {
+      async function reflectEditedCategory() {
+        if (newCategory !== "") {
+          // 1: change category name in categorylist in supabase
+          // filter out list of products to be modified (since they need can only be identified by ID)
+          const productsOfEditedCategory = catalog.filter(
+            (product) => product.productCategory === categoryEdit
+          );
+
+          for (let i = 0; i < productsOfEditedCategory.length; i++) {
+            const { error } = await supabase.from("CatalogList").upsert({
+              id: productsOfEditedCategory[i].id,
+              productCategory: newCategory,
+            });
+          }
+
+          for (let j = 0; j <= productsOfEditedCategory.length; j++) {
+            setCatalog(
+              catalog.map((product) =>
+                product.productCategory === categoryEdit
+                  ? (product.productCategory = newCategory)
+                  : product
+              )
+            );
+          }
+
+          // 2: change category name of affected products in supabase
+          const categoryToEdit = categoryList.filter(
+            (object) => object.category === categoryEdit
+          );
+          const { error } = await supabase
+            .from("CategoryList")
+            .upsert({ id: categoryToEdit[0].id, category: newCategory });
+          // reflect changes in local UI
+          setCategoryList(
+            categoryList.map((object) =>
+              object.category === categoryEdit
+                ? { ...object, category: newCategory }
+                : object
+            )
+          );
+        }
+        setDropdownValue1("");
+        setNewCategory("");
+      }
+      reflectEditedCategory();
+    },
+    [updatedFlag1]
+  );
+
   async function handleSubmit(e) {
     // prevent broswer reload
     e.preventDefault();
@@ -89,7 +146,7 @@ function EditForm({
           setUpdatedFlag(!updatedFlag);
           // console.log(productEdit.productTitle);
           // console.log(productEdit.id);
-          alert("Changes made successfully!");
+          // alert("Changes made successfully!");
         }
       }
     }
@@ -122,11 +179,30 @@ function EditForm({
     }
   }
 
-  // function EditingPanel() {
-  //   return (
+  async function handleEditCategorySubmit(e) {
+    e.preventDefault();
+    // alert("this button not ready yet!");
 
-  //   );
-  // }
+    // input validation
+    if (dropdownValue1 === "") {
+      alert("You have not chosen which category to edit yet!");
+    } else if (newCategory === "") {
+      alert("You have not keyed in anything yet!");
+    } else {
+      const response = window.confirm(
+        "Confirm new category name. This change is irreversible."
+      );
+      if (response) {
+        setUpdatedFlag1(!updatedFlag1); // this triggers the useEffect that executes the actual functionality
+      }
+    }
+  }
+
+  function handleEditCategorySelect(e) {
+    setNewCategory(e.target.value);
+    setCategoryEdit(e.target.value);
+    setDropdownValue1(e.target.value);
+  }
 
   return (
     <>
@@ -172,8 +248,21 @@ function EditForm({
           </select>
           <button>Update</button>
         </form>
-        <form>
-          <h2>Editing existing category name (building in progress)</h2>
+        <form onSubmit={handleEditCategorySubmit}>
+          <h2>Edit existing category name </h2>
+          <select onChange={handleEditCategorySelect} value={dropdownValue1}>
+            <option value={""}>Choose a category to edit</option>
+            {categoryList.map((object) => (
+              <option value={object.category}>{object.category}</option>
+            ))}
+          </select>
+          <input
+            type="text"
+            placeholder="New category name"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+          ></input>
+          <button>Edit</button>
         </form>
         <form>
           <h2>Mass change product category (building in progress)</h2>

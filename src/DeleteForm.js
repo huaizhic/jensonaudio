@@ -109,7 +109,7 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
         }
         // console.log(productsFromDeletedCategoryArray);
 
-        // convert productsFromDeletedCategoryArray to array of objects by taking just the id
+        // convert productsFromDeletedCategoryArray to array of product IDs
         // example format: [id of product 1, id of product 2, ...] (note: category of product doesn't matter, can mix)
         const sizeProductsFromDeletedCategoryArray =
           productsFromDeletedCategoryArray.length;
