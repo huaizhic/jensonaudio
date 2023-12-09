@@ -15,15 +15,24 @@ function EditForm({
   categoryList,
   setCategoryList,
 }) {
+  // useStates for edit product details
   const [inputTitle, setInputTitle] = useState("");
   const [inputPrice, setInputPrice] = useState("");
   const [inputCategory, setInputCategory] = useState("");
   const [updatedFlag, setUpdatedFlag] = useState(false); // useEffect flag for editing product details
-  const [updatedFlag1, setUpdatedFlag1] = useState(false); // useEffect flag for editing category name
   const [dropdownValue, setDropdownValue] = useState("Choose product"); // to reset dropdown for edit product after submission
+
+  // useStates for edit category name
+  const [updatedFlag1, setUpdatedFlag1] = useState(false); // useEffect flag for editing category name
   const [dropdownValue1, setDropdownValue1] = useState(""); // to reset dropdown for edit category after submission
   const [newCategory, setNewCategory] = useState(""); // for editing category name
   const [categoryEdit, setCategoryEdit] = useState(""); // for storing old category name
+
+  // useStates for mass change product category
+  const [productMassChangeCat, setProductMassChangeCat] = useState([]);
+  const [targetCatforMassChange, setTargetCatforMassChange] = useState("");
+  const [productCheck, setProductCheck] = useState(false);
+  const [updatedFlag2, setUpdatedFlag2] = useState(false);
 
   // for proper re-rendering after editing product details
   useEffect(
@@ -116,6 +125,44 @@ function EditForm({
     [updatedFlag1]
   );
 
+  // for proper rerendering to mass change category of selected products
+  useEffect(
+    function () {
+      async function updateMassCatChange() {
+        if (productMassChangeCat.length !== 0) {
+          const response = window.confirm(
+            "Please confirm changes. This action is irreversible"
+          );
+          if (response) {
+            // update supabase on the changes
+            for (let i = 0; i < productMassChangeCat.length; i++) {
+              const { error } = await supabase
+                .from("CatalogList")
+                .update({ productCategory: targetCatforMassChange })
+                .eq("id", productMassChangeCat[i].id);
+            }
+
+            let tempArray = catalog;
+
+            // did this instead of setCatalog in a for loop as the first change does not reflect in time to be picked up by the second loop
+            for (let j = 0; j < productMassChangeCat.length; j++) {
+              tempArray = tempArray.map((product) =>
+                product.id === productMassChangeCat[j].id
+                  ? { ...product, productCategory: targetCatforMassChange }
+                  : product
+              );
+            }
+            setCatalog(tempArray); // set State once instead of putting it in the for loop above
+            // setTargetCatforMassChange("");
+          }
+        }
+      }
+      updateMassCatChange();
+    },
+    [updatedFlag2] // doesn't matter whether updatedFlag2 is true or false, just need it to change to trigger the useEffect
+  );
+
+  // for edit product details
   async function handleSubmit(e) {
     // prevent broswer reload
     e.preventDefault();
@@ -152,6 +199,7 @@ function EditForm({
     }
   }
 
+  // for edit product details
   async function handleClick(productName) {
     // console.log(productName);
 
@@ -202,6 +250,34 @@ function EditForm({
     setNewCategory(e.target.value);
     setCategoryEdit(e.target.value);
     setDropdownValue1(e.target.value);
+  }
+
+  function handleMassCatCheck(productParam) {
+    // setProductCheck(e.target.checked);
+    setCatalog(
+      catalog.map((product) =>
+        product.id === productParam.id
+          ? { ...product, changeCategoryCheck: !product.changeCategoryCheck }
+          : product
+      )
+    );
+  }
+
+  async function handleMassCatSubmit(e) {
+    e.preventDefault();
+    // filter out products for category change (array of objects)
+    setProductMassChangeCat(
+      catalog.filter((product) => product.changeCategoryCheck === true)
+    );
+
+    if (targetCatforMassChange === "") {
+      alert(
+        "You have not selected a category to change the selected products to!"
+      );
+    } else {
+      setUpdatedFlag2(!updatedFlag2);
+      // the rest of the code can be found in the 3rd useEffect above
+    }
   }
 
   return (
@@ -264,8 +340,30 @@ function EditForm({
           ></input>
           <button>Edit</button>
         </form>
-        <form>
-          <h2>Mass change product category (building in progress)</h2>
+        <form onSubmit={handleMassCatSubmit}>
+          <h2>Mass change product category</h2>
+          <p>Note: Form does not reset when submit is successful</p>
+          {catalog.map((product) => (
+            <div>
+              <input
+                type="checkbox"
+                value={product.productTitle}
+                // checked={productCheck}
+                onChange={() => handleMassCatCheck(product)}
+              ></input>
+              <label>{product.productTitle}</label>
+            </div>
+          ))}
+          <select
+            value={targetCatforMassChange}
+            onChange={(e) => setTargetCatforMassChange(e.target.value)}
+          >
+            <option value="">Choose category to change to</option>
+            {categoryList.map((object) => (
+              <option value={object.category}>{object.category}</option>
+            ))}
+          </select>
+          <button>Submit</button>
         </form>
       </div>
     </>
