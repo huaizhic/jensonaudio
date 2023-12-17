@@ -70,9 +70,9 @@ function AddForm({
     if (newCategoryInput === "") {
       alert("You have not typed in anything yet!");
     } else {
-      // check if it is duplicate
+      // check if it is duplicate (string match, irregardless of upper/lowercase)
       const gotDuplicateCategory = categoryList.some((object) => {
-        if (object.category === newCategoryInput) {
+        if (object.category.toLowerCase() === newCategoryInput.toLowerCase()) {
           return true;
         }
         return false;
