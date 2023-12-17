@@ -350,17 +350,19 @@ function EditForm({
         <form onSubmit={handleMassCatSubmit}>
           <h2>Mass change product category</h2>
           <p>Note: Form does not reset when submit is successful</p>
-          {catalog.map((product) => (
-            <div>
-              <input
-                type="checkbox"
-                value={product.productTitle}
-                // checked={productCheck}
-                onChange={() => handleMassCatCheck(product)}
-              ></input>
-              <label>{product.productTitle}</label>
-            </div>
-          ))}
+          <div class="scrollMassEditCategory">
+            {catalog.map((product) => (
+              <div>
+                <input
+                  type="checkbox"
+                  value={product.productTitle}
+                  // checked={productCheck}
+                  onChange={() => handleMassCatCheck(product)}
+                ></input>
+                <label>{product.productTitle}</label>
+              </div>
+            ))}
+          </div>
           <select
             value={targetCatforMassChange}
             onChange={(e) => setTargetCatforMassChange(e.target.value)}

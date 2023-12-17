@@ -63,3 +63,9 @@
   height: 130px;
   overflow: scroll;
 }
+
+.scrollMassEditCategory {
+  background-color: #fde68a;
+  height: 245px;
+  overflow: scroll;
+}
