@@ -18,6 +18,8 @@ function AddForm({
   setProductCategory,
   categoryList,
   setCategoryList,
+  catalogFilterRerender,
+  setCatalogFilterRerender,
 }) {
   const [newCategoryInput, setNewCategoryInput] = useState("");
 
@@ -59,6 +61,7 @@ function AddForm({
           setProductTitle("");
           setProductPrice("");
           setProductCategory("");
+          setCatalogFilterRerender(!catalogFilterRerender);
         }
       }
     }

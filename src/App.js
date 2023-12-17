@@ -55,6 +55,8 @@ function App() {
           setProductCategory={setProductCategory}
           categoryList={categoryList}
           setCategoryList={setCategoryList}
+          catalogFilterRerender={catalogFilterRerender}
+          setCatalogFilterRerender={setCatalogFilterRerender}
         />
         <DeleteForm
           setCatalog={setCatalog}
