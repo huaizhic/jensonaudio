@@ -34,7 +34,7 @@ function AddForm({
       alert("Please fill in all the input fields!");
     } else {
       const gotDuplicateProduct = catalog.some((product) => {
-        if (product.productTitle === productTitle) {
+        if (product.productTitle.toLowerCase() === productTitle.toLowerCase()) {
           return true;
         }
         return false;
