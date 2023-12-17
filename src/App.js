@@ -24,6 +24,8 @@ function App() {
   const [categoryList, setCategoryList] = useState([]); // array of objects from supabase
   const [catalogUnfiltered, setCatalogUnfiltered] = useState(true);
   const [catalogFilterView, setCatalogFilterView] = useState([]);
+  const [catalogFilterRerender, setCatalogFilterRerender] = useState(false);
+  const [catalogFilterTarget, setCatalogFilterTarget] = useState("All");
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -67,6 +69,8 @@ function App() {
           setProductEdit={setProductEdit}
           categoryList={categoryList}
           setCategoryList={setCategoryList}
+          catalogFilterRerender={catalogFilterRerender}
+          setCatalogFilterRerender={setCatalogFilterRerender}
         />
       </div>
 
@@ -80,6 +84,10 @@ function App() {
           setCatalogUnfiltered={setCatalogUnfiltered}
           catalogFilterView={catalogFilterView}
           setCatalogFilterView={setCatalogFilterView}
+          catalogFilterRerender={catalogFilterRerender}
+          setCatalogFilterRerender={setCatalogFilterRerender}
+          catalogFilterTarget={catalogFilterTarget}
+          setCatalogFilterTarget={setCatalogFilterTarget}
         />
         <CatalogList
           catalog={catalog}
@@ -88,6 +96,10 @@ function App() {
           setCatalogUnfiltered={setCatalogUnfiltered}
           catalogFilterView={catalogFilterView}
           setCatalogFilterView={setCatalogFilterView}
+          catalogFilterRerender={catalogFilterRerender}
+          setCatalogFilterRerender={setCatalogFilterRerender}
+          catalogFilterTarget={catalogFilterTarget}
+          setCatalogFilterTarget={setCatalogFilterTarget}
         />
       </main>
       <Footer />

@@ -11,6 +11,10 @@ function Sidebar({
   setCatalogUnfiltered,
   catalogFilterView,
   setCatalogFilterView,
+  catalogFilterRerender,
+  setCatalogFilterRerender,
+  catalogFilterTarget,
+  setCatalogFilterTarget,
 }) {
   return (
     <aside
@@ -29,6 +33,10 @@ function Sidebar({
         setCatalogUnfiltered={setCatalogUnfiltered}
         catalogFilterView={catalogFilterView}
         setCatalogFilterView={setCatalogFilterView}
+        catalogFilterRerender={catalogFilterRerender}
+        setCatalogFilterRerender={setCatalogFilterRerender}
+        catalogFilterTarget={catalogFilterTarget}
+        setCatalogFilterTarget={setCatalogFilterTarget}
       />
       <SortBar />
       <EmbedFacebook />

@@ -42,6 +42,10 @@ function CatalogList({
   setCatalogUnfiltered,
   catalogFilterView,
   setCatalogFilterView,
+  catalogFilterRerender,
+  setCatalogFilterRerender,
+  catalogFilterTarget,
+  setCatalogFilterTarget,
 }) {
   useEffect(function () {
     async function getCatalog() {

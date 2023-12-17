@@ -14,6 +14,8 @@ function EditForm({
   setProductEdit,
   categoryList,
   setCategoryList,
+  catalogFilterRerender,
+  setCatalogFilterRerender,
 }) {
   // useStates for edit product details
   const [inputTitle, setInputTitle] = useState("");
@@ -65,6 +67,7 @@ function EditForm({
 
           handleClick("Choose product");
           setDropdownValue("Choose product");
+          setCatalogFilterRerender(!catalogFilterRerender);
           // console.log(updatedProduct);
         }
       }
