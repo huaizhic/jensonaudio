@@ -35,7 +35,14 @@ import CatalogCell from "./CatalogCell";
 //   },
 // ];
 
-function CatalogList({ catalog, setCatalog }) {
+function CatalogList({
+  catalog,
+  setCatalog,
+  catalogUnfiltered,
+  setCatalogUnfiltered,
+  catalogFilterView,
+  setCatalogFilterView,
+}) {
   useEffect(function () {
     async function getCatalog() {
       const { data: Catalog, error } = await supabase
@@ -55,17 +62,18 @@ function CatalogList({ catalog, setCatalog }) {
         backgroundColor: "lightgray",
       }}
     >
-      {catalog.map((product) => (
-        <CatalogCell
-          // Image={Image}
-          product={product}
-          key={product.id}
-          productTitle={product.productTitle} // passed in as a prop
-          productPrice={product.productPrice}
-          productCategory={product.productCategory}
-        />
-      ))}
-      {/* {catalog} */}
+      {catalogUnfiltered
+        ? catalog.map((product) => (
+            <CatalogCell
+              // Image={Image}
+              product={product}
+              key={product.id}
+              productTitle={product.productTitle} // passed in as a prop
+              productPrice={product.productPrice}
+              productCategory={product.productCategory}
+            />
+          ))
+        : catalogFilterView.map((product) => <CatalogCell product={product} />)}
     </section>
   );
 }

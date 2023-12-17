@@ -22,6 +22,8 @@ function App() {
     productCategory: null,
   });
   const [categoryList, setCategoryList] = useState([]); // array of objects from supabase
+  const [catalogUnfiltered, setCatalogUnfiltered] = useState(true);
+  const [catalogFilterView, setCatalogFilterView] = useState([]);
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -72,8 +74,21 @@ function App() {
         <Sidebar
           categoryList={categoryList}
           setCategoryList={setCategoryList}
+          catalog={catalog}
+          setCatalog={setCatalog}
+          catalogUnfiltered={catalogUnfiltered}
+          setCatalogUnfiltered={setCatalogUnfiltered}
+          catalogFilterView={catalogFilterView}
+          setCatalogFilterView={setCatalogFilterView}
         />
-        <CatalogList catalog={catalog} setCatalog={setCatalog} />
+        <CatalogList
+          catalog={catalog}
+          setCatalog={setCatalog}
+          catalogUnfiltered={catalogUnfiltered}
+          setCatalogUnfiltered={setCatalogUnfiltered}
+          catalogFilterView={catalogFilterView}
+          setCatalogFilterView={setCatalogFilterView}
+        />
       </main>
       <Footer />
     </>
