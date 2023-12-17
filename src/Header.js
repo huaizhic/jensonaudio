@@ -1,6 +1,35 @@
+import { useState } from "react";
 import HeaderButton from "./HeaderButton";
 
-function Header() {
+function Header({
+  catalog,
+  catalogUnfiltered,
+  setCatalogUnfiltered,
+  catalogFilterView,
+  setCatalogFilterView,
+}) {
+  const [searchInput, setSearchInput] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const searchInputLowerCase = searchInput.toLowerCase();
+
+    // generate result array of objects, filtered from catalog array
+    const resultArray = catalog.filter((product) =>
+      product.productTitle.toLowerCase().includes(searchInputLowerCase)
+    );
+
+    // console.log(resultArray);
+
+    setCatalogUnfiltered(false);
+    setCatalogFilterView(resultArray);
+  }
+
+  function handleChange(e) {
+    setSearchInput(e.target.value);
+  }
+
   return (
     <>
       <header
@@ -16,12 +45,14 @@ function Header() {
         <div>
           <HeaderButton />
         </div>
-        <form>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
-            placeholder="Search product...(not working yet)"
-            style={{}}
+            placeholder="Search product..."
+            value={searchInput}
+            onChange={(e) => handleChange(e)}
           ></input>
+          <button>Search</button>
         </form>
       </header>
     </>

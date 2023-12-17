@@ -41,7 +41,13 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header
+        catalog={catalog}
+        catalogUnfiltered={catalogUnfiltered}
+        setCatalogUnfiltered={setCatalogUnfiltered}
+        catalogFilterView={catalogFilterView}
+        setCatalogFilterView={setCatalogFilterView}
+      />
       {/* <Banner /> */}
       <div style={{ display: "flex" }}>
         <AddForm

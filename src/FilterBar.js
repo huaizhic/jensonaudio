@@ -39,7 +39,7 @@ function FilterBar({
 
   return (
     <ul style={{ listStyle: "None" }}>
-      Filter by Category: (early stage)
+      Filter by Category:
       <li>
         <button onClick={() => handleClick("All")}>All</button>
       </li>
