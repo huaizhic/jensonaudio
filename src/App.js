@@ -61,6 +61,8 @@ function App() {
           catalog={catalog}
           categoryList={categoryList}
           setCategoryList={setCategoryList}
+          catalogFilterRerender={catalogFilterRerender}
+          setCatalogFilterRerender={setCatalogFilterRerender}
         />
         <EditForm
           setCatalog={setCatalog}

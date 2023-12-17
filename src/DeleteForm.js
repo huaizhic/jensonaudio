@@ -1,6 +1,13 @@
 import supabase from "./supabase";
 
-function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
+function DeleteForm({
+  setCatalog,
+  catalog,
+  categoryList,
+  setCategoryList,
+  catalogFilterRerender,
+  setCatalogFilterRerender,
+}) {
   async function handleProductSubmit(e) {
     // prevent broswer reload
     e.preventDefault();
@@ -44,6 +51,7 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
 
         // delete on local UI
         setCatalog(catalog.filter((product) => product.deleteCheck === false));
+        setCatalogFilterRerender(!catalogFilterRerender);
         alert("Deleted!");
       }
     }
