@@ -23,6 +23,19 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
       ); // boolean
       if (response === false) {
       } else {
+        // filter out list of products to be deleted based on deleteCheck flag
+        let productsToDelete = catalog.filter(
+          (product) => product.deleteCheck === true
+        );
+
+        // update deleteCheck values on supabase
+        for (let i = 0; i < productsToDelete.length; i++) {
+          const { error } = await supabase.from("CatalogList").upsert({
+            id: productsToDelete[i].id,
+            deleteCheck: productsToDelete[i].deleteCheck,
+          });
+        }
+
         // delete on supabase
         const { error } = await supabase
           .from("CatalogList")
@@ -36,22 +49,12 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
     }
   }
 
-  async function handleProductCheckbox(product) {
-    // console.log(product);
-    // to reflect changes in supabase (WORKS NOW!!!)
-    const { data: updatedProduct, error } = await supabase
-      .from("CatalogList")
-      .update({ deleteCheck: !product.deleteCheck })
-      .eq("id", product.id)
-      .select();
-
-    // console.log(updatedProduct);
-    // console.log(updatedProduct[0]);
-
-    // to reflect in local UI (WORKS NOW!!!)    (note: use updatedProduct[0] because updatedProduct is array of an obj)
+  async function handleProductCheckbox(productParam) {
     setCatalog(
       catalog.map((product) =>
-        updatedProduct[0].id === product.id ? updatedProduct[0] : product
+        product.id === productParam.id
+          ? { ...product, deleteCheck: !product.deleteCheck }
+          : product
       )
     );
   }
@@ -171,10 +174,6 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
     <>
       <div className="deleteForm">
         <h2>Delete existing product(s)</h2>
-        <p>
-          Note: Checkboxes are persistent even after refresh, as they are tied
-          to the database.
-        </p>
         <form className="deleteProductForm" onSubmit={handleProductSubmit}>
           <div className="scrollDeleteProduct">
             {catalog.map((product) => (
