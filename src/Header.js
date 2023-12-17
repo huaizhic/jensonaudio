@@ -16,11 +16,12 @@ function Header({
     const searchInputLowerCase = searchInput.toLowerCase();
 
     // generate result array of objects, filtered from catalog array
-    const resultArray = catalog.filter((product) =>
-      product.productTitle.toLowerCase().includes(searchInputLowerCase)
+    // search based on substring (non-case sensitive)
+    const resultArray = catalog.filter(
+      (product) =>
+        product.productTitle.toLowerCase().indexOf(searchInputLowerCase) !== -1
+      // product.productTitle.toLowerCase().includes(searchInputLowerCase)
     );
-
-    // console.log(resultArray);
 
     setCatalogUnfiltered(false);
     setCatalogFilterView(resultArray);

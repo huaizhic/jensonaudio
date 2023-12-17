@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import supabase from "./supabase";
 import "./style.css";
-import FakeCatalogData from "./CatalogList";
 import Banner from "./Banner";
 import Header from "./Header";
 import Footer from "./Footer";
