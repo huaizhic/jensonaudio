@@ -156,7 +156,7 @@ function EditForm({
               );
             }
             setCatalog(tempArray); // set State once instead of putting it in the for loop above
-            // setTargetCatforMassChange("");
+            setCatalogFilterRerender(!catalogFilterRerender);
           }
         }
       }
