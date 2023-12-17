@@ -247,9 +247,13 @@ function EditForm({
   }
 
   function handleEditCategorySelect(e) {
-    setNewCategory(e.target.value);
-    setCategoryEdit(e.target.value);
-    setDropdownValue1(e.target.value);
+    if (e.target.value === "Others") {
+      alert('Category "Others" should not be modified nor deleted!');
+    } else {
+      setNewCategory(e.target.value);
+      setCategoryEdit(e.target.value);
+      setDropdownValue1(e.target.value);
+    }
   }
 
   function handleMassCatCheck(productParam) {

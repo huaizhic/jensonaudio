@@ -71,8 +71,20 @@ function DeleteForm({ setCatalog, catalog, categoryList, setCategoryList }) {
     const sizeCategoryDeleteArray = categoryDeleteArray.length;
     // console.log(sizeCategoryDeleteArray);
 
+    const isOthersChecked = categoryDeleteArray.some((obj) => {
+      if (obj.category === "Others") {
+        return true;
+      }
+      return false;
+    });
+
+    // console.log(isOthersChecked);
+    // console.log(categoryDeleteArray);
+
     if (sizeCategoryDeleteArray === 0) {
       alert("You have not selected any checkboxes yet!");
+    } else if (isOthersChecked) {
+      alert('Category "Others" cannot be deleted nor modified!');
     } else {
       const response = window.confirm(
         'Confirm deletion of categorie(s). This action is irreversible.  \n\nNOTE: Products of deleted categorie(s) will be automatically re-assigned the default category "Others".'
