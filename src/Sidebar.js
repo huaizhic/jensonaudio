@@ -38,7 +38,15 @@ function Sidebar({
         catalogFilterTarget={catalogFilterTarget}
         setCatalogFilterTarget={setCatalogFilterTarget}
       />
-      <SortBar />
+      <SortBar
+        catalog={catalog}
+        catalogUnfiltered={catalogUnfiltered}
+        setCatalogUnfiltered={setCatalogUnfiltered}
+        catalogFilterView={catalogFilterView}
+        setCatalogFilterView={setCatalogFilterView}
+        catalogFilterRerender={catalogFilterRerender}
+        setCatalogFilterRerender={setCatalogFilterRerender}
+      />
       <EmbedFacebook />
     </aside>
   );
