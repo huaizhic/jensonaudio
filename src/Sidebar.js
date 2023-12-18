@@ -46,6 +46,7 @@ function Sidebar({
         setCatalogFilterView={setCatalogFilterView}
         catalogFilterRerender={catalogFilterRerender}
         setCatalogFilterRerender={setCatalogFilterRerender}
+        catalogFilterTarget={catalogFilterTarget}
       />
       <EmbedFacebook />
     </aside>
