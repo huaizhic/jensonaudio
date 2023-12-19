@@ -15,6 +15,7 @@ function CatalogCell({ product, productTitle, productPrice, productCategory }) {
       <span>{product.productPrice}</span>
       <span>{product.productCategory}</span>
       <span>{product.deleteCheck}</span>
+      <span>{product.created_at}</span>
     </div>
   );
 }

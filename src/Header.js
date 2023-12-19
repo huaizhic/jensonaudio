@@ -7,6 +7,15 @@ function Header({
   setCatalogUnfiltered,
   catalogFilterView,
   setCatalogFilterView,
+  setAlphabetCheck,
+  alphabetCheck,
+  recentCheck,
+  setRecentCheck,
+  priceCheck,
+  setPriceCheck,
+  setAllCheck,
+  categoryList,
+  setCategoryList,
 }) {
   const [searchInput, setSearchInput] = useState("");
 
@@ -20,11 +29,22 @@ function Header({
     const resultArray = catalog.filter(
       (product) =>
         product.productTitle.toLowerCase().indexOf(searchInputLowerCase) !== -1
-      // product.productTitle.toLowerCase().includes(searchInputLowerCase)
+      // as long as it can return a positive index at which first character of substring is found, there is a match.
+      // originally intended to use product.productTitle.toLowerCase().includes(searchInputLowerCase), but used above code instead to support older broswers
     );
 
     setCatalogUnfiltered(false);
     setCatalogFilterView(resultArray);
+
+    setPriceCheck(false);
+    setAlphabetCheck(false);
+    setRecentCheck(false);
+    setAllCheck(true);
+    setCategoryList(
+      categoryList.map((object) =>
+        true ? { ...object, filterSelected: false } : object
+      )
+    );
   }
 
   function handleChange(e) {
@@ -49,7 +69,7 @@ function Header({
         <form onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
-            placeholder="Search product..."
+            placeholder="Search product (Substring Match)"
             value={searchInput}
             onChange={(e) => handleChange(e)}
           ></input>

@@ -25,6 +25,12 @@ function App() {
   const [catalogFilterView, setCatalogFilterView] = useState([]);
   const [catalogFilterRerender, setCatalogFilterRerender] = useState(false);
   const [catalogFilterTarget, setCatalogFilterTarget] = useState("All");
+  const [sortStatus, setSortStatus] = useState("random");
+
+  const [alphabetCheck, setAlphabetCheck] = useState(false);
+  const [recentCheck, setRecentCheck] = useState(false);
+  const [priceCheck, setPriceCheck] = useState(false);
+  const [allCheck, setAllCheck] = useState(true);
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -46,6 +52,15 @@ function App() {
         setCatalogUnfiltered={setCatalogUnfiltered}
         catalogFilterView={catalogFilterView}
         setCatalogFilterView={setCatalogFilterView}
+        alphabetCheck={alphabetCheck}
+        setAlphabetCheck={setAlphabetCheck}
+        recentCheck={recentCheck}
+        setRecentCheck={setRecentCheck}
+        priceCheck={priceCheck}
+        setPriceCheck={setPriceCheck}
+        setAllCheck={setAllCheck}
+        categoryList={categoryList}
+        setCategoryList={setCategoryList}
       />
       {/* <Banner /> */}
       <div style={{ display: "flex" }}>
@@ -97,6 +112,16 @@ function App() {
           setCatalogFilterRerender={setCatalogFilterRerender}
           catalogFilterTarget={catalogFilterTarget}
           setCatalogFilterTarget={setCatalogFilterTarget}
+          sortStatus={sortStatus}
+          setSortStatus={setSortStatus}
+          alphabetCheck={alphabetCheck}
+          setAlphabetCheck={setAlphabetCheck}
+          recentCheck={recentCheck}
+          setRecentCheck={setRecentCheck}
+          priceCheck={priceCheck}
+          setPriceCheck={setPriceCheck}
+          allCheck={allCheck}
+          setAllCheck={setAllCheck}
         />
         <CatalogList
           catalog={catalog}

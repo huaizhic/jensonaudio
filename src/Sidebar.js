@@ -15,6 +15,16 @@ function Sidebar({
   setCatalogFilterRerender,
   catalogFilterTarget,
   setCatalogFilterTarget,
+  sortStatus,
+  setSortStatus,
+  alphabetCheck,
+  setAlphabetCheck,
+  recentCheck,
+  setRecentCheck,
+  priceCheck,
+  setPriceCheck,
+  allCheck,
+  setAllCheck,
 }) {
   return (
     <aside
@@ -37,6 +47,10 @@ function Sidebar({
         setCatalogFilterRerender={setCatalogFilterRerender}
         catalogFilterTarget={catalogFilterTarget}
         setCatalogFilterTarget={setCatalogFilterTarget}
+        sortStatus={sortStatus}
+        setSortStatus={setSortStatus}
+        allCheck={allCheck}
+        setAllCheck={setAllCheck}
       />
       <SortBar
         catalog={catalog}
@@ -47,6 +61,14 @@ function Sidebar({
         catalogFilterRerender={catalogFilterRerender}
         setCatalogFilterRerender={setCatalogFilterRerender}
         catalogFilterTarget={catalogFilterTarget}
+        sortStatus={sortStatus}
+        setSortStatus={setSortStatus}
+        alphabetCheck={alphabetCheck}
+        setAlphabetCheck={setAlphabetCheck}
+        recentCheck={recentCheck}
+        setRecentCheck={setRecentCheck}
+        priceCheck={priceCheck}
+        setPriceCheck={setPriceCheck}
       />
       <EmbedFacebook />
     </aside>
