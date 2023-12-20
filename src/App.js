@@ -34,6 +34,7 @@ function App() {
 
   const [searchClick, setSearchClick] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -68,6 +69,8 @@ function App() {
         setSearchClick={setSearchClick}
         searchInput={searchInput}
         setSearchInput={setSearchInput}
+        searchResult={searchResult}
+        setSearchResult={setSearchResult}
       />
       {/* <Banner /> */}
       <div style={{ display: "flex" }}>
@@ -129,6 +132,10 @@ function App() {
           setPriceCheck={setPriceCheck}
           allCheck={allCheck}
           setAllCheck={setAllCheck}
+          searchClick={searchClick}
+          setSearchClick={setSearchClick}
+          searchResult={searchResult}
+          setSearchResult={setSearchResult}
         />
         <CatalogList
           catalog={catalog}

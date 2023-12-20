@@ -25,6 +25,10 @@ function Sidebar({
   setPriceCheck,
   allCheck,
   setAllCheck,
+  searchClick,
+  setSearchClick,
+  searchResult,
+  setSearchResult,
 }) {
   return (
     <aside
@@ -51,6 +55,10 @@ function Sidebar({
         setSortStatus={setSortStatus}
         allCheck={allCheck}
         setAllCheck={setAllCheck}
+        searchClick={searchClick}
+        setSearchClick={setSearchClick}
+        searchResult={searchResult}
+        setSearchResult={setSearchResult}
       />
       <SortBar
         catalog={catalog}

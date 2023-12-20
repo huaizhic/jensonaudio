@@ -20,6 +20,8 @@ function Header({
   setSearchClick,
   searchInput,
   setSearchInput,
+  searchResult,
+  setSearchResult,
 }) {
   // const [searchInput, setSearchInput] = useState("");
 
@@ -52,6 +54,7 @@ function Header({
       ];
     }
 
+    setSearchResult(searchResultArray);
     setCatalogUnfiltered(false);
     setCatalogFilterView(searchResultArray);
 
