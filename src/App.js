@@ -32,6 +32,9 @@ function App() {
   const [priceCheck, setPriceCheck] = useState(false);
   const [allCheck, setAllCheck] = useState(true);
 
+  const [searchClick, setSearchClick] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+
   // for fetching categoryList from supabase
   useEffect(function () {
     async function getCategoryList() {
@@ -61,6 +64,10 @@ function App() {
         setAllCheck={setAllCheck}
         categoryList={categoryList}
         setCategoryList={setCategoryList}
+        searchClick={searchClick}
+        setSearchClick={setSearchClick}
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
       />
       {/* <Banner /> */}
       <div style={{ display: "flex" }}>
@@ -134,6 +141,17 @@ function App() {
           setCatalogFilterRerender={setCatalogFilterRerender}
           catalogFilterTarget={catalogFilterTarget}
           setCatalogFilterTarget={setCatalogFilterTarget}
+          searchClick={searchClick}
+          setSearchClick={setSearchClick}
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+          allCheck={allCheck}
+          setAllCheck={setAllCheck}
+          categoryList={categoryList}
+          setCategoryList={setCategoryList}
+          setAlphabetCheck={setAlphabetCheck}
+          setRecentCheck={setRecentCheck}
+          setPriceCheck={setPriceCheck}
         />
       </main>
       <Footer />

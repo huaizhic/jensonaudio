@@ -13,6 +13,17 @@ function CatalogList({
   setCatalogFilterRerender,
   catalogFilterTarget,
   setCatalogFilterTarget,
+  searchClick,
+  setSearchClick,
+  searchInput,
+  setSearchInput,
+  allCheck,
+  setAllCheck,
+  categoryList,
+  setCategoryList,
+  setAlphabetCheck,
+  setRecentCheck,
+  setPriceCheck,
 }) {
   useEffect(function () {
     async function getCatalog() {
@@ -24,6 +35,24 @@ function CatalogList({
     }
     getCatalog();
   }, []);
+
+  function handleClick() {
+    // set catalog view back to original unfiltered unsorted catalog
+    setCatalogUnfiltered(true);
+    setSearchClick(false);
+    setSearchInput("");
+    // set filter state back to all
+    setAllCheck(true);
+    setCategoryList(
+      categoryList.map((object) =>
+        true ? { ...object, filterSelected: false } : object
+      )
+    );
+    // set sorting state back to random (deselect)
+    setAlphabetCheck(false);
+    setRecentCheck(false);
+    setPriceCheck(false);
+  }
 
   return (
     <section
@@ -45,6 +74,9 @@ function CatalogList({
             />
           ))
         : catalogFilterView.map((product) => <CatalogCell product={product} />)}
+      {searchClick ? (
+        <button onClick={() => handleClick()}>Clear Search</button>
+      ) : null}
     </section>
   );
 }

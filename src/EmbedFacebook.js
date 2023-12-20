@@ -1,5 +1,5 @@
 function EmbedFacebook() {
-  return <p>Space to embed facebook/carousell page</p>;
+  return <p>Space to embed facebook/carousell page/Advertisements</p>;
 }
 
 export default EmbedFacebook;

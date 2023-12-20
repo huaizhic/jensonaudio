@@ -16,8 +16,12 @@ function Header({
   setAllCheck,
   categoryList,
   setCategoryList,
+  searchClick,
+  setSearchClick,
+  searchInput,
+  setSearchInput,
 }) {
-  const [searchInput, setSearchInput] = useState("");
+  // const [searchInput, setSearchInput] = useState("");
 
   function handleSubmit(e) {
     // *** currently, search function only searches the entire unfiltered catalog, unsorted.
@@ -60,6 +64,7 @@ function Header({
         true ? { ...object, filterSelected: false } : object
       )
     );
+    setSearchClick(true);
   }
 
   function handleChange(e) {
@@ -84,7 +89,7 @@ function Header({
         <form onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
-            placeholder="Search product (Substring Match)"
+            placeholder="Search product..."
             value={searchInput}
             onChange={(e) => handleChange(e)}
           ></input>
