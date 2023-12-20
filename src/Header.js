@@ -20,21 +20,36 @@ function Header({
   const [searchInput, setSearchInput] = useState("");
 
   function handleSubmit(e) {
+    // *** currently, search function only searches the entire unfiltered catalog, unsorted.
+    // *** there is also no functionality to filter and sort the search result yet.
+
     e.preventDefault();
 
-    const searchInputLowerCase = searchInput.toLowerCase();
+    // in order to make search non case sensitive, make both user search and catalog details lowercase for comparision
+    let searchInputLowerCase = searchInput.toLowerCase();
 
-    // generate result array of objects, filtered from catalog array
-    // search based on substring (non-case sensitive)
-    const resultArray = catalog.filter(
-      (product) =>
-        product.productTitle.toLowerCase().indexOf(searchInputLowerCase) !== -1
-      // as long as it can return a positive index at which first character of substring is found, there is a match.
-      // originally intended to use product.productTitle.toLowerCase().includes(searchInputLowerCase), but used above code instead to support older broswers
-    );
+    // split search input by spaces, to search the individual words too
+    let searchInputArray = searchInputLowerCase.split(" ");
+
+    let searchResultArray = [];
+
+    for (let i = 0; i < searchInputArray.length; i++) {
+      searchResultArray = [
+        ...searchResultArray,
+        // generate result array of objects, filtered from catalog array
+        // search based on substring (non-case sensitive)
+        ...catalog.filter(
+          (product) =>
+            product.productTitle.toLowerCase().indexOf(searchInputArray[i]) !==
+            -1
+          // as long as it can return a positive index at which first character of substring is found, there is a match.
+          // originally intended to use product.productTitle.toLowerCase().includes(searchInputLowerCase), but used above code instead to support older broswers
+        ),
+      ];
+    }
 
     setCatalogUnfiltered(false);
-    setCatalogFilterView(resultArray);
+    setCatalogFilterView(searchResultArray);
 
     setPriceCheck(false);
     setAlphabetCheck(false);
