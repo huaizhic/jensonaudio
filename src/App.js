@@ -41,8 +41,8 @@ function App() {
 
   const [fetchData, setFetchData] = useState(false);
 
-  const location = useLocation();
-  console.log(location);
+  // const location = useLocation();
+  // console.log(location);
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -166,6 +166,7 @@ function App() {
           element={
             <Product
               catalog={catalog}
+              setCatalog={setCatalog}
               fetchData={fetchData}
               setFetchData={setFetchData}
             />
