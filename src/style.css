@@ -69,3 +69,14 @@
   height: 245px;
   overflow: scroll;
 }
+
+.AdminTools {
+  background-color: #94a3b8;
+  border: solid;
+  text-align: center;
+}
+
+.AdminToolsComponents {
+  display: flex;
+  justify-content: center;
+}

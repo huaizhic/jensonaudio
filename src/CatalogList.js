@@ -24,6 +24,8 @@ function CatalogList({
   setAlphabetCheck,
   setRecentCheck,
   setPriceCheck,
+  fetchData,
+  setFetchData,
 }) {
   useEffect(function () {
     async function getCatalog() {

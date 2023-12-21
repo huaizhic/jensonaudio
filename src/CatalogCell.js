@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function CatalogCell({ product, productTitle, productPrice, productCategory }) {
   // console.log({ FakeCatalogData.ProductName });
   return (
@@ -11,11 +13,15 @@ function CatalogCell({ product, productTitle, productPrice, productCategory }) {
       }}
     >
       {/* <img src={Image} height="250" width="250" /> */}
-      <h1>{product.productTitle}</h1>
+      <h1>
+        <Link to={`product/${product.productTitle}`}>
+          {product.productTitle}
+        </Link>
+      </h1>
       <span>{product.productPrice}</span>
       <span>{product.productCategory}</span>
       <span>{product.deleteCheck}</span>
-      <span>{product.created_at}</span>
+      <span>Created on: {new Date(product.created_at).toString()}</span>
     </div>
   );
 }

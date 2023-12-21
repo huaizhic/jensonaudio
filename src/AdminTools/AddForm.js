@@ -1,5 +1,5 @@
 import { useState } from "react";
-import supabase from "./supabase";
+import supabase from "../supabase";
 
 // const FakeCategories = [
 //   { name: "Speakers" },
@@ -20,6 +20,8 @@ function AddForm({
   setCategoryList,
   catalogFilterRerender,
   setCatalogFilterRerender,
+  productDescription,
+  setProductDescription,
 }) {
   const [newCategoryInput, setNewCategoryInput] = useState("");
 
@@ -52,7 +54,14 @@ function AddForm({
           // upload newly submitted product to supabase, and retrieve it at the same time, naming it newProduct
           const { data: newProduct, error } = await supabase
             .from("CatalogList")
-            .insert([{ productTitle, productPrice, productCategory }])
+            .insert([
+              {
+                productTitle,
+                productPrice,
+                productCategory,
+                productDescription,
+              },
+            ])
             .select();
           // console.log(newProduct);
           // reflect changes on local UI
@@ -61,6 +70,7 @@ function AddForm({
           setProductTitle("");
           setProductPrice("");
           setProductCategory("");
+          setProductDescription("");
           setCatalogFilterRerender(!catalogFilterRerender);
         }
       }
@@ -125,6 +135,12 @@ function AddForm({
               <option value={object.category}>{object.category}</option>
             ))}
           </select>
+          <input
+            type="text"
+            placeholder="Description"
+            value={productDescription}
+            onChange={(e) => setProductDescription(e.target.value)}
+          ></input>
           <button>Add</button>
         </form>
         <form onSubmit={handleCategorySubmit}>

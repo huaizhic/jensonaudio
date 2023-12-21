@@ -1,16 +1,11 @@
-const headerButtonArray = [
-  { Name: "Brands" },
-  { Name: "About" },
-  { Name: "Contact" },
-  { Name: "Request a demo" },
-];
+import { Link } from "react-router-dom";
 
-function HeaderButton() {
-  return headerButtonArray.map((headerButtonArray) => (
+function HeaderButton({ button }) {
+  return (
     <button style={{ marginLeft: 15, marginRight: 15, border: "" }}>
-      {headerButtonArray.Name}
+      <Link to={button.RoutingName}> {button.Name}</Link>
     </button>
-  ));
+  );
 }
 
 export default HeaderButton;

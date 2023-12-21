@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import supabase from "./supabase";
+import supabase from "../supabase";
 
 const FakeCategories = [
   { name: "Speakers" },
@@ -16,11 +16,14 @@ function EditForm({
   setCategoryList,
   catalogFilterRerender,
   setCatalogFilterRerender,
+  productDescription,
+  setProductDescription,
 }) {
   // useStates for edit product details
   const [inputTitle, setInputTitle] = useState("");
   const [inputPrice, setInputPrice] = useState("");
   const [inputCategory, setInputCategory] = useState("");
+  const [inputDescription, setInputDescription] = useState("");
   const [updatedFlag, setUpdatedFlag] = useState(false); // useEffect flag for editing product details
   const [dropdownValue, setDropdownValue] = useState("Choose product"); // to reset dropdown for edit product after submission
 
@@ -45,7 +48,8 @@ function EditForm({
           // use an if condition as the updatedFlag gets changed twice every refresh, triggering the useEffect unexpectedly
           productEdit.productTitle !== null &&
           productEdit.productPrice !== null &&
-          productEdit.productCategory !== null
+          productEdit.productCategory !== null &&
+          productEdit.productDescription !== null
         ) {
           const { data: updatedProduct, error } = await supabase
             .from("CatalogList")
@@ -55,6 +59,7 @@ function EditForm({
               productTitle: productEdit.productTitle,
               productPrice: productEdit.productPrice,
               productCategory: productEdit.productCategory,
+              productDescription: productEdit.productDescription,
             })
             .select();
 
@@ -191,6 +196,7 @@ function EditForm({
             productTitle: inputTitle,
             productPrice: inputPrice,
             productCategory: inputCategory,
+            productDescription: inputDescription,
           });
 
           setUpdatedFlag(!updatedFlag);
@@ -216,6 +222,7 @@ function EditForm({
       setInputTitle("");
       setInputPrice("");
       setInputCategory("");
+      setInputDescription("");
       setDropdownValue("Choose product");
     } else {
       setDropdownValue(productName);
@@ -226,6 +233,7 @@ function EditForm({
       setInputTitle(arrayOfObject[0].productTitle);
       setInputPrice(arrayOfObject[0].productPrice);
       setInputCategory(arrayOfObject[0].productCategory);
+      setInputDescription(arrayOfObject[0].productDescription);
       // console.log(arrayOfObject[0].productTitle);
     }
   }
@@ -329,6 +337,12 @@ function EditForm({
               <option value={object.category}>{object.category}</option>
             ))}
           </select>
+          <input
+            type="text"
+            placeholder="New Description"
+            value={inputDescription}
+            onChange={(e) => setInputDescription(e.target.value)}
+          />
           <button>Update</button>
         </form>
         <form onSubmit={handleEditCategorySubmit}>

@@ -6,15 +6,18 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 import CatalogList from "./CatalogList";
-import AddForm from "./AddForm";
-import DeleteForm from "./DeleteForm";
-import EditForm from "./EditForm";
+import { Route, Routes, useLocation } from "react-router-dom";
+import AdminTools from "./AdminTools/AdminTools";
+import About from "./About";
+import Product from "./Product";
+import ErrorPage from "./ErrorPage";
 
 function App() {
   const [catalog, setCatalog] = useState([]);
   const [productTitle, setProductTitle] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productCategory, setProductCategory] = useState("");
+  const [productDescription, setProductDescription] = useState("");
   const [productEdit, setProductEdit] = useState({
     productTitle: null,
     productPrice: null,
@@ -35,6 +38,11 @@ function App() {
   const [searchClick, setSearchClick] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+
+  const [fetchData, setFetchData] = useState(false);
+
+  const location = useLocation();
+  console.log(location);
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -73,103 +81,102 @@ function App() {
         setSearchResult={setSearchResult}
       />
       {/* <Banner /> */}
-      <div style={{ display: "flex" }}>
-        <AddForm
-          catalog={catalog}
-          setCatalog={setCatalog}
-          productTitle={productTitle}
-          setProductTitle={setProductTitle}
-          productPrice={productPrice}
-          setProductPrice={setProductPrice}
-          productCategory={productCategory}
-          setProductCategory={setProductCategory}
-          categoryList={categoryList}
-          setCategoryList={setCategoryList}
-          catalogFilterRerender={catalogFilterRerender}
-          setCatalogFilterRerender={setCatalogFilterRerender}
+      <AdminTools
+        catalog={catalog}
+        setCatalog={setCatalog}
+        productTitle={productTitle}
+        setProductTitle={setProductTitle}
+        productPrice={productPrice}
+        setProductPrice={setProductPrice}
+        productCategory={productCategory}
+        setProductCategory={setProductCategory}
+        categoryList={categoryList}
+        setCategoryList={setCategoryList}
+        catalogFilterRerender={catalogFilterRerender}
+        setCatalogFilterRerender={setCatalogFilterRerender}
+        productEdit={productEdit}
+        setProductEdit={setProductEdit}
+        productDescription={productDescription}
+        setProductDescription={setProductDescription}
+      />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <main style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
+              <Sidebar
+                categoryList={categoryList}
+                setCategoryList={setCategoryList}
+                catalog={catalog}
+                setCatalog={setCatalog}
+                catalogUnfiltered={catalogUnfiltered}
+                setCatalogUnfiltered={setCatalogUnfiltered}
+                catalogFilterView={catalogFilterView}
+                setCatalogFilterView={setCatalogFilterView}
+                catalogFilterRerender={catalogFilterRerender}
+                setCatalogFilterRerender={setCatalogFilterRerender}
+                catalogFilterTarget={catalogFilterTarget}
+                setCatalogFilterTarget={setCatalogFilterTarget}
+                sortStatus={sortStatus}
+                setSortStatus={setSortStatus}
+                alphabetCheck={alphabetCheck}
+                setAlphabetCheck={setAlphabetCheck}
+                recentCheck={recentCheck}
+                setRecentCheck={setRecentCheck}
+                priceCheck={priceCheck}
+                setPriceCheck={setPriceCheck}
+                allCheck={allCheck}
+                setAllCheck={setAllCheck}
+                searchClick={searchClick}
+                setSearchClick={setSearchClick}
+                searchResult={searchResult}
+                setSearchResult={setSearchResult}
+              />
+              <CatalogList
+                catalog={catalog}
+                setCatalog={setCatalog}
+                catalogUnfiltered={catalogUnfiltered}
+                setCatalogUnfiltered={setCatalogUnfiltered}
+                catalogFilterView={catalogFilterView}
+                setCatalogFilterView={setCatalogFilterView}
+                catalogFilterRerender={catalogFilterRerender}
+                setCatalogFilterRerender={setCatalogFilterRerender}
+                catalogFilterTarget={catalogFilterTarget}
+                setCatalogFilterTarget={setCatalogFilterTarget}
+                searchClick={searchClick}
+                setSearchClick={setSearchClick}
+                searchInput={searchInput}
+                setSearchInput={setSearchInput}
+                allCheck={allCheck}
+                setAllCheck={setAllCheck}
+                categoryList={categoryList}
+                setCategoryList={setCategoryList}
+                setAlphabetCheck={setAlphabetCheck}
+                setRecentCheck={setRecentCheck}
+                setPriceCheck={setPriceCheck}
+                fetchData={fetchData}
+                setFetchData={setFetchData}
+              />
+            </main>
+          }
         />
-        <DeleteForm
-          setCatalog={setCatalog}
-          catalog={catalog}
-          categoryList={categoryList}
-          setCategoryList={setCategoryList}
-          catalogFilterRerender={catalogFilterRerender}
-          setCatalogFilterRerender={setCatalogFilterRerender}
+        <Route path="/about" element={<About />} />
+        <Route
+          path="/product/:id"
+          element={
+            <Product
+              catalog={catalog}
+              fetchData={fetchData}
+              setFetchData={setFetchData}
+            />
+          }
         />
-        <EditForm
-          setCatalog={setCatalog}
-          catalog={catalog}
-          productEdit={productEdit}
-          setProductEdit={setProductEdit}
-          categoryList={categoryList}
-          setCategoryList={setCategoryList}
-          catalogFilterRerender={catalogFilterRerender}
-          setCatalogFilterRerender={setCatalogFilterRerender}
-        />
-      </div>
+        <Route path="/*" element={<ErrorPage />} />
+      </Routes>
 
-      <main style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
-        <Sidebar
-          categoryList={categoryList}
-          setCategoryList={setCategoryList}
-          catalog={catalog}
-          setCatalog={setCatalog}
-          catalogUnfiltered={catalogUnfiltered}
-          setCatalogUnfiltered={setCatalogUnfiltered}
-          catalogFilterView={catalogFilterView}
-          setCatalogFilterView={setCatalogFilterView}
-          catalogFilterRerender={catalogFilterRerender}
-          setCatalogFilterRerender={setCatalogFilterRerender}
-          catalogFilterTarget={catalogFilterTarget}
-          setCatalogFilterTarget={setCatalogFilterTarget}
-          sortStatus={sortStatus}
-          setSortStatus={setSortStatus}
-          alphabetCheck={alphabetCheck}
-          setAlphabetCheck={setAlphabetCheck}
-          recentCheck={recentCheck}
-          setRecentCheck={setRecentCheck}
-          priceCheck={priceCheck}
-          setPriceCheck={setPriceCheck}
-          allCheck={allCheck}
-          setAllCheck={setAllCheck}
-          searchClick={searchClick}
-          setSearchClick={setSearchClick}
-          searchResult={searchResult}
-          setSearchResult={setSearchResult}
-        />
-        <CatalogList
-          catalog={catalog}
-          setCatalog={setCatalog}
-          catalogUnfiltered={catalogUnfiltered}
-          setCatalogUnfiltered={setCatalogUnfiltered}
-          catalogFilterView={catalogFilterView}
-          setCatalogFilterView={setCatalogFilterView}
-          catalogFilterRerender={catalogFilterRerender}
-          setCatalogFilterRerender={setCatalogFilterRerender}
-          catalogFilterTarget={catalogFilterTarget}
-          setCatalogFilterTarget={setCatalogFilterTarget}
-          searchClick={searchClick}
-          setSearchClick={setSearchClick}
-          searchInput={searchInput}
-          setSearchInput={setSearchInput}
-          allCheck={allCheck}
-          setAllCheck={setAllCheck}
-          categoryList={categoryList}
-          setCategoryList={setCategoryList}
-          setAlphabetCheck={setAlphabetCheck}
-          setRecentCheck={setRecentCheck}
-          setPriceCheck={setPriceCheck}
-        />
-      </main>
       <Footer />
     </>
   );
-}
-
-function sortCatalogArray() {
-  // let noOfCatalogItems = FakeCatalogData.length;
-  // if (noOfCatalogItems > 6) {
-  // }
 }
 
 export default App;

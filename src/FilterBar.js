@@ -26,6 +26,11 @@ function FilterBar({
 
   // to re-render filtered catalog view everytime an external change is made (eg delete product, edit product, etc)
   useEffect(() => {
+    // multiple scenarios:
+    // #1: Filter and/or sorting engaged w/o search
+    // #2: Filter and/or sorting engaged with search
+    // #3: Search engaged with no filtering and sorting
+
     setCatalogFilterView(
       catalog.filter(
         (product) => product.productCategory === catalogFilterTarget
@@ -190,31 +195,34 @@ function FilterBar({
   }
 
   return (
-    <ul style={{ listStyle: "None" }}>
-      Filter by Category:
-      <li>
-        <label>
-          <input
-            type="radio"
-            checked={allCheck}
-            onChange={() => handleClick("All")}
-          />
-          All
-        </label>
-      </li>
-      {categoryList.map((object) => (
+    <>
+      <ul style={{ listStyle: "None" }}>
+        Filter by Category:
         <li>
           <label>
             <input
               type="radio"
-              checked={object.filterSelected}
-              onChange={() => handleClick(object)}
+              checked={allCheck}
+              onChange={() => handleClick("All")}
             />
-            {object.category}
+            All
           </label>
         </li>
-      ))}
-    </ul>
+        {categoryList.map((object) => (
+          <li>
+            <label>
+              <input
+                type="radio"
+                checked={object.filterSelected}
+                onChange={() => handleClick(object)}
+              />
+              {object.category}
+            </label>
+          </li>
+        ))}
+      </ul>
+      <p> Filter By Brand (coming soon)</p>
+    </>
   );
 }
 

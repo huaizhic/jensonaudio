@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase from "../supabase";
 
 function DeleteForm({
   setCatalog,
@@ -7,6 +7,8 @@ function DeleteForm({
   setCategoryList,
   catalogFilterRerender,
   setCatalogFilterRerender,
+  productDescription,
+  setProductDescription,
 }) {
   async function handleProductSubmit(e) {
     // prevent broswer reload

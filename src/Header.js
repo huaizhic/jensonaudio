@@ -1,6 +1,14 @@
 import { useState } from "react";
 import HeaderButton from "./HeaderButton";
 
+const headerButtonArray = [
+  { Name: "Home", RoutingName: "" },
+  { Name: "Brands", RoutingName: "brands" },
+  { Name: "About", RoutingName: "about" },
+  { Name: "Contact", RoutingName: "contact" },
+  { Name: "Request a demo", RoutingName: "requestademo" },
+];
+
 function Header({
   catalog,
   catalogUnfiltered,
@@ -87,7 +95,9 @@ function Header({
       >
         <img src="jenson.jpg" height="30" width="160" alt="Jenson Audio logo" />
         <div>
-          <HeaderButton />
+          {headerButtonArray.map((button) => (
+            <HeaderButton button={button} />
+          ))}
         </div>
         <form onSubmit={(e) => handleSubmit(e)}>
           <input
