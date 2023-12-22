@@ -38,6 +38,10 @@ function CatalogList({
     getCatalog();
   }, []);
 
+  if (catalog.length === 0) {
+    return <h1>Still loading...</h1>;
+  }
+
   function handleClick() {
     // set catalog view back to original unfiltered unsorted catalog
     setCatalogUnfiltered(true);

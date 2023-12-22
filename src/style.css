@@ -80,3 +80,7 @@
   display: flex;
   justify-content: center;
 }
+
+.Product {
+  background-color: lightgrey;
+}

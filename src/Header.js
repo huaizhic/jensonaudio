@@ -6,7 +6,7 @@ const headerButtonArray = [
   { Name: "Brands", RoutingName: "brands" },
   { Name: "About", RoutingName: "about" },
   { Name: "Contact", RoutingName: "contact" },
-  { Name: "Request a demo", RoutingName: "requestademo" },
+  { Name: "Admin", RoutingName: "admin" },
 ];
 
 function Header({

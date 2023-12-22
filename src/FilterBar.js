@@ -194,6 +194,10 @@ function FilterBar({
     }
   }
 
+  if (categoryList.length === 0) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <>
       <ul style={{ listStyle: "None" }}>
@@ -221,7 +225,8 @@ function FilterBar({
           </li>
         ))}
       </ul>
-      <p> Filter By Brand (coming soon)</p>
+      <span> Filter by Brand (coming soon)</span>
+      <span> Filter by Price Range (coming soon)</span>
     </>
   );
 }
