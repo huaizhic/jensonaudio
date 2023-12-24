@@ -13,6 +13,9 @@ import Product from "./Product";
 import ErrorPage from "./ErrorPage";
 import AdminView from "./AdminView";
 import ProductEdit from "./ProductEdit";
+import AdminRoutes from "./AdminRoutes";
+import { AuthWrapper } from "./Auth/AuthWrapper";
+import Login from "./Auth/Login";
 
 function App() {
   const [catalog, setCatalog] = useState([]);
@@ -43,8 +46,7 @@ function App() {
 
   const [fetchData, setFetchData] = useState(false);
 
-  // const location = useLocation();
-  // console.log(location);
+  const [user, setUser] = useState({ name: "", isAuthenticated: false });
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -146,7 +148,7 @@ function App() {
             </>
           }
         />
-        <Route
+        {/* <Route
           path="/admin"
           element={
             <AdminView
@@ -192,7 +194,7 @@ function App() {
               setFetchData={setFetchData}
             />
           }
-        ></Route>
+        ></Route> */}
         <Route path="/about" element={<About />} />
         <Route
           path="/product/:id"
@@ -206,7 +208,55 @@ function App() {
           }
         />
         <Route path="/*" element={<ErrorPage />} />
-        <Route
+        {/* <Route
+          path="/admin"
+          element={
+            <AdminRoutes
+              catalog={catalog}
+              setCatalog={setCatalog}
+              catalogUnfiltered={catalogUnfiltered}
+              setCatalogUnfiltered={setCatalogUnfiltered}
+              catalogFilterView={catalogFilterView}
+              setCatalogFilterView={setCatalogFilterView}
+              alphabetCheck={alphabetCheck}
+              setAlphabetCheck={setAlphabetCheck}
+              recentCheck={recentCheck}
+              setRecentCheck={setRecentCheck}
+              priceCheck={priceCheck}
+              setPriceCheck={setPriceCheck}
+              setAllCheck={setAllCheck}
+              categoryList={categoryList}
+              setCategoryList={setCategoryList}
+              searchClick={searchClick}
+              setSearchClick={setSearchClick}
+              searchInput={searchInput}
+              setSearchInput={setSearchInput}
+              searchResult={searchResult}
+              setSearchResult={setSearchResult}
+              productTitle={productTitle}
+              setProductTitle={setProductTitle}
+              productPrice={productPrice}
+              setProductPrice={setProductPrice}
+              productCategory={productCategory}
+              setProductCategory={setProductCategory}
+              catalogFilterRerender={catalogFilterRerender}
+              setCatalogFilterRerender={setCatalogFilterRerender}
+              productEdit={productEdit}
+              setProductEdit={setProductEdit}
+              productDescription={productDescription}
+              setProductDescription={setProductDescription}
+              catalogFilterTarget={catalogFilterTarget}
+              setCatalogFilterTarget={setCatalogFilterTarget}
+              sortStatus={sortStatus}
+              setSortStatus={setSortStatus}
+              allCheck={allCheck}
+              fetchData={fetchData}
+              setFetchData={setFetchData}
+            />
+          } 
+        /> */}
+
+        {/* <Route
           path="/admin/product/:id"
           element={
             <>
@@ -221,9 +271,58 @@ function App() {
               <ProductEdit catalog={catalog} categoryList={categoryList} />
             </>
           }
+        ></Route> */}
+        <Route
+          path="/admin/*"
+          element={
+            <AuthWrapper
+              catalog={catalog}
+              setCatalog={setCatalog}
+              catalogUnfiltered={catalogUnfiltered}
+              setCatalogUnfiltered={setCatalogUnfiltered}
+              catalogFilterView={catalogFilterView}
+              setCatalogFilterView={setCatalogFilterView}
+              alphabetCheck={alphabetCheck}
+              setAlphabetCheck={setAlphabetCheck}
+              recentCheck={recentCheck}
+              setRecentCheck={setRecentCheck}
+              priceCheck={priceCheck}
+              setPriceCheck={setPriceCheck}
+              setAllCheck={setAllCheck}
+              categoryList={categoryList}
+              setCategoryList={setCategoryList}
+              searchClick={searchClick}
+              setSearchClick={setSearchClick}
+              searchInput={searchInput}
+              setSearchInput={setSearchInput}
+              searchResult={searchResult}
+              setSearchResult={setSearchResult}
+              productTitle={productTitle}
+              setProductTitle={setProductTitle}
+              productPrice={productPrice}
+              setProductPrice={setProductPrice}
+              productCategory={productCategory}
+              setProductCategory={setProductCategory}
+              catalogFilterRerender={catalogFilterRerender}
+              setCatalogFilterRerender={setCatalogFilterRerender}
+              productEdit={productEdit}
+              setProductEdit={setProductEdit}
+              productDescription={productDescription}
+              setProductDescription={setProductDescription}
+              catalogFilterTarget={catalogFilterTarget}
+              setCatalogFilterTarget={setCatalogFilterTarget}
+              sortStatus={sortStatus}
+              setSortStatus={setSortStatus}
+              allCheck={allCheck}
+              fetchData={fetchData}
+              setFetchData={setFetchData}
+              user={user}
+              setUser={setUser}
+            />
+          }
         ></Route>
+        <Route path="/login" element={<Login />}></Route>
       </Routes>
-
       <Footer />
     </>
   );

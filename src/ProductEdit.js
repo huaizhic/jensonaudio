@@ -1,9 +1,19 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 
-function ProductEdit({ catalog, categoryList }) {
+function ProductEdit({ catalog, categoryList, user, setUser }) {
   const [indivProductEdit, setIndivProductEdit] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  function checkAdmin() {
+    if (user.isAuthenticated === false) {
+      // alert("You are not logged in to admin yet!");
+      navigate("/login");
+    }
+  }
+
+  checkAdmin();
 
   let selectedProduct = catalog.filter((product) =>
     product.productTitle === id ? product : null

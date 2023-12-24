@@ -2,6 +2,7 @@ import Header from "./Header";
 import AdminTools from "./AdminTools/AdminTools";
 import Sidebar from "./Sidebar";
 import CatalogList from "./CatalogList";
+import { useNavigate } from "react-router-dom";
 
 function AdminView({
   catalog,
@@ -44,7 +45,20 @@ function AdminView({
   allCheck,
   fetchData,
   setFetchData,
+  user,
+  setUser,
 }) {
+  const navigate = useNavigate();
+
+  function checkAdmin() {
+    if (user.isAuthenticated === false) {
+      // alert("You are not logged in to admin yet!");
+      navigate("/login");
+    }
+  }
+
+  checkAdmin();
+
   return (
     <>
       <AdminTools
