@@ -9,7 +9,7 @@ function ProductEdit({ catalog, categoryList, user, setUser }) {
   function checkAdmin() {
     if (user.isAuthenticated === false) {
       // alert("You are not logged in to admin yet!");
-      navigate("/login");
+      navigate("/admin/login");
     }
   }
 

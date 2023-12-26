@@ -4,7 +4,7 @@ import supabase from "../supabase";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Product from "../Product";
 import ProductEdit from "../ProductEdit";
-import Login from "./Login";
+import Login from "./LoginPage";
 
 const AuthContext = createContext("");
 export const useAdminAuth = () => useContext(AuthContext);
@@ -55,19 +55,29 @@ export const AuthWrapper = ({
 }) => {
   //   const [user, setUser] = useState({ name: "", isAuthenticated: false });
 
-  const login = async (userName, password) => {
-    let { data: loginSuccess, error } = await supabase.auth.signInWithPassword({
+  const processLogin = async (userName, password) => {
+    let { data, error } = await supabase.auth.signInWithPassword({
       email: userName,
       password: password,
     });
 
-    if (loginSuccess) {
+    if (data.user.aud === "authenticated") {
       alert("Log in success!");
       setUser({ name: userName, isAuthenticated: true });
+      console.log(data);
     } else {
       alert("Log in failed");
       alert(error);
     }
+
+    // if (loginSuccess) {
+    //   alert("Log in success!");
+    //   console.log(loginSuccess);
+    //   setUser({ name: userName, isAuthenticated: true });
+    // } else {
+    //   alert("Log in failed");
+    //   alert(error);
+    // }
   };
 
   const logout = () => {
@@ -76,7 +86,7 @@ export const AuthWrapper = ({
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, processLogin, logout }}>
       {/*  wrap admin pages inside here */}
       <>
         {/* <Login /> */}
@@ -151,6 +161,7 @@ export const AuthWrapper = ({
               </>
             }
           ></Route>
+          <Route path="/login" element={<Login />}></Route>
         </Routes>
         <Outlet />
       </>

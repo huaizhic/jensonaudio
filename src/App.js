@@ -15,7 +15,7 @@ import AdminView from "./AdminView";
 import ProductEdit from "./ProductEdit";
 import AdminRoutes from "./AdminRoutes";
 import { AuthWrapper } from "./Auth/AuthWrapper";
-import Login from "./Auth/Login";
+import Login from "./Auth/LoginPage";
 
 function App() {
   const [catalog, setCatalog] = useState([]);
@@ -321,7 +321,7 @@ function App() {
             />
           }
         ></Route>
-        <Route path="/login" element={<Login />}></Route>
+        {/* <Route path="/login" element={<Login />}></Route> */}
       </Routes>
       <Footer />
     </>
