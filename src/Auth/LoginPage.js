@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "./AuthWrapper";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function LoginPage() {
+function LoginPage({ user, setUser }) {
   const navigate = useNavigate();
-  const { processLogin } = useAdminAuth(); // custom hook for Admin Authentication Context
+  const { processLogin, sessionData, sessionCheck, setSessionCheck } =
+    useAdminAuth(); // custom hook for Admin Authentication Context
   //   const test = useAdminAuth();
   //   console.log(test);
   // const [formData, dispatch] = useReducer(reducer, {
@@ -20,6 +21,51 @@ function LoginPage() {
   //   return { ...formData, newItem };
   // }
 
+  // if (sessionData.length === 0) {
+  //   return <h1>Checking session</h1>;
+  // }
+
+  useEffect(
+    function () {
+      function checkSession() {
+        // if (sessionData !== undefined) {
+        //   setUser({ ...user, isAuthenticated: true }); // this triggers an infinite loop for some reason
+        //   // console.log("user authenticated");
+        //   console.log(sessionData);
+        // }
+
+        // if (sessionData.length === 0) {
+        //   return <h1>Checking session...</h1>;
+        // }
+
+        if (sessionData.beforeFetchData === "true") {
+          console.log(
+            "Session data not loaded from supabase yet but react component rendered already (race condition)"
+          );
+
+          // return () => {
+          //   <h1>Checking session...</h1>;
+          // };
+        }
+
+        if (sessionData.session !== null) {
+          setUser({ ...user, isAuthenticated: true });
+          navigate("/admin");
+        }
+
+        console.log(sessionData);
+
+        if (user.isAuthenticated === false) {
+          // alert("You are not logged in to admin yet!");
+          // navigate("/admin/login");
+        }
+      }
+
+      checkSession();
+    },
+    [sessionCheck]
+  );
+
   const handleSubmit = async () => {
     try {
       await processLogin(inputUsername, inputPassword);
@@ -31,7 +77,7 @@ function LoginPage() {
   };
 
   return (
-    <div>
+    <div className="loginPage">
       <h2>Admin Login page</h2>
       <div>
         <div>
@@ -50,8 +96,11 @@ function LoginPage() {
         </div>
         <div>
           <button onClick={handleSubmit}>Log in</button>
+          {/* <button onClick={() => setSessionCheck(!sessionCheck)}>
+            Quick log in if recently signed out
+          </button> */}
         </div>
-        {errorMessage ? <div className="error">{errorMessage}</div> : null}
+        {errorMessage ? <div className="loginError">{errorMessage}</div> : null}
       </div>
     </div>
   );

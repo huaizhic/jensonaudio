@@ -1,8 +1,10 @@
-import Header from "./Header";
-import AdminTools from "./AdminTools/AdminTools";
-import Sidebar from "./Sidebar";
-import CatalogList from "./CatalogList";
+import Header from "../Header";
+import AdminTools from ".//AdminTools/AdminTools";
+import Sidebar from "../Sidebar";
+import CatalogList from "../CatalogList";
 import { useNavigate } from "react-router-dom";
+import { useAdminAuth } from "../Auth/AuthWrapper";
+import { useEffect, useState } from "react";
 
 function AdminView({
   catalog,
@@ -49,18 +51,99 @@ function AdminView({
   setUser,
 }) {
   const navigate = useNavigate();
+  const { processLogout, sessionData, sessionCheck, setSessionCheck } =
+    useAdminAuth();
+  // console.log(sessionData);
+  // const [sessionCheck, setSessionCheck] = useState(false);
+  // setSessionCheck(!sessionCheck);
 
-  function checkAdmin() {
-    if (user.isAuthenticated === false) {
-      // alert("You are not logged in to admin yet!");
-      navigate("/admin/login");
-    }
+  useEffect(
+    function () {
+      function checkSession() {
+        // if (sessionData !== undefined) {
+        //   setUser({ ...user, isAuthenticated: true }); // this triggers an infinite loop for some reason
+        //   // console.log("user authenticated");
+        //   console.log(sessionData);
+        // }
+
+        // if (sessionData.length === 0) {
+        //   return <h1>Checking session...</h1>;
+        // }
+
+        if (sessionData.beforeFetchData === "true") {
+          console.log(
+            "Session data not loaded from supabase yet but react component rendered already (race condition)"
+          );
+
+          // return () => {
+          //   <h1>Checking session...</h1>;
+          // };
+        }
+
+        // if (sessionData.signedOut === "true") {
+        //   alert("please log in as admin");
+        // }
+
+        if (sessionData.session !== null) {
+          setUser({ ...user, isAuthenticated: true }); // problematic code causing login bypass w/o credentials
+          console.log(sessionData.session);
+        }
+
+        console.log(sessionData);
+        // console.log(sessionData.session);
+
+        if (user.isAuthenticated === false) {
+          // alert("You are not logged in to admin yet!");
+          navigate("/admin/login");
+        }
+      }
+
+      checkSession();
+    },
+    [sessionCheck]
+  );
+
+  useEffect(() => {
+    setSessionCheck(!sessionCheck);
+  }, []);
+
+  // useEffect(() => {
+  //   while (sessionData.beforeFetchData === "true") {
+  //     setSessionCheck(!sessionCheck);
+  //     console.log("anyhow");
+  //   }
+  // }, []);
+
+  // function checkAdmin() {
+  //   if (sessionData.beforeFetchData === "true") {
+  //     setSessionCheck(!sessionCheck);
+  //   }
+  // }
+
+  // if (sessionData.beforeFetchData === "true") {
+  //   setSessionCheck(!sessionCheck);
+  // }
+
+  function handleLogout() {
+    processLogout();
+    navigate("/");
   }
 
-  checkAdmin();
+  // function checkAdmin() {
+  //   if (user.isAuthenticated === false) {
+  //     // alert("You are not logged in to admin yet!");
+  //     navigate("/admin/login");
+  //   }
+  //   console.log("user authenticated?", user.isAuthenticated);
+  // }
+
+  // checkAdmin();
 
   return (
     <>
+      <div className="adminLogout">
+        <button onClick={handleLogout}>Logout</button>
+      </div>
       <AdminTools
         catalog={catalog}
         setCatalog={setCatalog}

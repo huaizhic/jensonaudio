@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import supabase from "../supabase";
+// import supabase from "../supabase";
+import supabase from "../../supabase";
+import { useAdminAuth } from "../../Auth/AuthWrapper";
 
 const FakeCategories = [
   { name: "Speakers" },
@@ -38,6 +40,8 @@ function EditForm({
   const [targetCatforMassChange, setTargetCatforMassChange] = useState("");
   const [productCheck, setProductCheck] = useState(false);
   const [updatedFlag2, setUpdatedFlag2] = useState(false);
+
+  const { sessionData } = useAdminAuth();
 
   // for proper re-rendering after editing product details
   useEffect(
@@ -175,34 +179,41 @@ function EditForm({
     // prevent broswer reload
     e.preventDefault();
     // alert("This button is not ready yet!");
-    if (dropdownValue === "Choose product") {
-      alert("You have not chosen a product to edit yet!");
-    } else {
-      if (
-        inputTitle === "" ||
-        Number.isNaN(inputPrice) ||
-        inputPrice === "" ||
-        inputCategory === ""
-      ) {
-        alert("You have not filled in all the blanks!");
-      } else {
-        const response = window.confirm(
-          "Confirm changes. This action is irreversible"
-        ); // boolean
-        if (response === false) {
-        } else {
-          setProductEdit({
-            ...productEdit,
-            productTitle: inputTitle,
-            productPrice: inputPrice,
-            productCategory: inputCategory,
-            productDescription: inputDescription,
-          });
 
-          setUpdatedFlag(!updatedFlag);
-          // console.log(productEdit.productTitle);
-          // console.log(productEdit.id);
-          // alert("Changes made successfully!");
+    if (sessionData === undefined) {
+      alert(
+        "You do not have admin privileges to perform this action. Please log in as admin and try again"
+      );
+    } else {
+      if (dropdownValue === "Choose product") {
+        alert("You have not chosen a product to edit yet!");
+      } else {
+        if (
+          inputTitle === "" ||
+          Number.isNaN(inputPrice) ||
+          inputPrice === "" ||
+          inputCategory === ""
+        ) {
+          alert("You have not filled in all the blanks!");
+        } else {
+          const response = window.confirm(
+            "Confirm changes. This action is irreversible"
+          ); // boolean
+          if (response === false) {
+          } else {
+            setProductEdit({
+              ...productEdit,
+              productTitle: inputTitle,
+              productPrice: inputPrice,
+              productCategory: inputCategory,
+              productDescription: inputDescription,
+            });
+
+            setUpdatedFlag(!updatedFlag);
+            // console.log(productEdit.productTitle);
+            // console.log(productEdit.id);
+            // alert("Changes made successfully!");
+          }
         }
       }
     }
@@ -242,17 +253,23 @@ function EditForm({
     e.preventDefault();
     // alert("this button not ready yet!");
 
-    // input validation
-    if (dropdownValue1 === "") {
-      alert("You have not chosen which category to edit yet!");
-    } else if (newCategory === "") {
-      alert("You have not keyed in anything yet!");
-    } else {
-      const response = window.confirm(
-        "Confirm new category name. This change is irreversible."
+    if (sessionData === undefined) {
+      alert(
+        "You do not have admin privileges to perform this action. Please log in as admin and try again"
       );
-      if (response) {
-        setUpdatedFlag1(!updatedFlag1); // this triggers the useEffect that executes the actual functionality
+    } else {
+      // input validation
+      if (dropdownValue1 === "") {
+        alert("You have not chosen which category to edit yet!");
+      } else if (newCategory === "") {
+        alert("You have not keyed in anything yet!");
+      } else {
+        const response = window.confirm(
+          "Confirm new category name. This change is irreversible."
+        );
+        if (response) {
+          setUpdatedFlag1(!updatedFlag1); // this triggers the useEffect that executes the actual functionality
+        }
       }
     }
   }
@@ -280,18 +297,25 @@ function EditForm({
 
   async function handleMassCatSubmit(e) {
     e.preventDefault();
-    // filter out products for category change (array of objects)
-    setProductMassChangeCat(
-      catalog.filter((product) => product.changeCategoryCheck === true)
-    );
 
-    if (targetCatforMassChange === "") {
+    if (sessionData === undefined) {
       alert(
-        "You have not selected a category to change the selected products to!"
+        "You do not have admin privileges to perform this action. Please log in as admin and try again"
       );
     } else {
-      setUpdatedFlag2(!updatedFlag2);
-      // the rest of the code can be found in the 3rd useEffect above
+      // filter out products for category change (array of objects)
+      setProductMassChangeCat(
+        catalog.filter((product) => product.changeCategoryCheck === true)
+      );
+
+      if (targetCatforMassChange === "") {
+        alert(
+          "You have not selected a category to change the selected products to!"
+        );
+      } else {
+        setUpdatedFlag2(!updatedFlag2);
+        // the rest of the code can be found in the 3rd useEffect above
+      }
     }
   }
 

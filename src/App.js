@@ -7,15 +7,16 @@ import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 import CatalogList from "./CatalogList";
 import { Route, Routes } from "react-router-dom";
-import AdminTools from "./AdminTools/AdminTools";
+import AdminTools from "./Admin/AdminTools/AdminTools";
 import About from "./About";
 import Product from "./Product";
 import ErrorPage from "./ErrorPage";
-import AdminView from "./AdminView";
-import ProductEdit from "./ProductEdit";
-import AdminRoutes from "./AdminRoutes";
+import AdminView from "./Admin/AdminView";
+// import ProductEdit from "./AdminTools/ProductEdit";
+import ProductEdit from "./Admin/AdminTools/ProductEdit";
 import { AuthWrapper } from "./Auth/AuthWrapper";
 import Login from "./Auth/LoginPage";
+import AddForm from "./Admin/AdminTools/AddForm";
 
 function App() {
   const [catalog, setCatalog] = useState([]);
@@ -84,6 +85,24 @@ function App() {
         searchResult={searchResult}
         setSearchResult={setSearchResult}
       />
+      {/* <AdminTools
+        catalog={catalog}
+        setCatalog={setCatalog}
+        productTitle={productTitle}
+        setProductTitle={setProductTitle}
+        productPrice={productPrice}
+        setProductPrice={setProductPrice}
+        productCategory={productCategory}
+        setProductCategory={setProductCategory}
+        categoryList={categoryList}
+        setCategoryList={setCategoryList}
+        catalogFilterRerender={catalogFilterRerender}
+        setCatalogFilterRerender={setCatalogFilterRerender}
+        productEdit={productEdit}
+        setProductEdit={setProductEdit}
+        productDescription={productDescription}
+        setProductDescription={setProductDescription}
+      /> */}
       <Routes>
         <Route
           path="/"
@@ -323,6 +342,7 @@ function App() {
         ></Route>
         {/* <Route path="/login" element={<Login />}></Route> */}
       </Routes>
+
       <Footer />
     </>
   );

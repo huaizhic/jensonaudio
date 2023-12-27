@@ -84,3 +84,15 @@
 .Product {
   background-color: lightgrey;
 }
+
+.loginPage {
+  text-align: center;
+}
+
+.loginError {
+  color: red;
+}
+
+.adminLogout {
+  text-align: center;
+}

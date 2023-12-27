@@ -1,13 +1,17 @@
-import { createContext, useContext, useState } from "react";
-import AdminView from "../AdminView";
+import { createContext, useContext, useEffect, useState } from "react";
+import AdminView from "../Admin/AdminView";
 import supabase from "../supabase";
 import { Outlet, Route, Routes } from "react-router-dom";
 import Product from "../Product";
-import ProductEdit from "../ProductEdit";
+// import ProductEdit from "../AdminTools/ProductEdit";
+import ProductEdit from "../Admin/AdminTools/ProductEdit";
 import Login from "./LoginPage";
 
 const AuthContext = createContext("");
 export const useAdminAuth = () => useContext(AuthContext);
+// useEffect(async () => {
+//   const { data: sessionData, error } = await supabase.auth.getSession();
+// }, []);
 
 export const AuthWrapper = ({
   catalog,
@@ -54,6 +58,39 @@ export const AuthWrapper = ({
   setUser,
 }) => {
   //   const [user, setUser] = useState({ name: "", isAuthenticated: false });
+  const [sessionData, setSessionData] = useState({ beforeFetchData: "true" });
+  const [sessionUpdate, setSessionUpdate] = useState(false);
+  const [sessionCheck, setSessionCheck] = useState(false);
+
+  // useEffect(async () => {
+  //   const { data: session, error } = await supabase.auth.getSession();
+  //   setSessionData(session);
+  // }, []);
+
+  useEffect(
+    function () {
+      async function getSession() {
+        const { data: session, error } = await supabase.auth.getSession();
+        setSessionData(session);
+        setSessionCheck(!sessionCheck);
+        // setSessionCheck(!sessionCheck);
+        // setSessionCheck(!sessionCheck);
+      }
+      getSession();
+      // setSessionCheck(!sessionCheck);
+      // setSessionCheck(!sessionCheck);
+      // setSessionCheck(!sessionCheck);
+    },
+    [sessionUpdate]
+  );
+
+  // useEffect(() => {
+  //   setSessionCheck(!sessionCheck);
+  // }, []);
+
+  // if (sessionData.beforeFetchData === "true") {
+  //   setSessionCheck(!sessionCheck);
+  // }
 
   const processLogin = async (userName, password) => {
     let { data, error } = await supabase.auth.signInWithPassword({
@@ -65,28 +102,34 @@ export const AuthWrapper = ({
       alert("Log in success!");
       setUser({ name: userName, isAuthenticated: true });
       console.log(data);
+      setSessionUpdate(!sessionUpdate);
+      // set session with supabase
+      // const { data: test, error } = await supabase.auth.getSession();
+      // console.log(test);
     } else {
       alert("Log in failed");
       alert(error);
     }
-
-    // if (loginSuccess) {
-    //   alert("Log in success!");
-    //   console.log(loginSuccess);
-    //   setUser({ name: userName, isAuthenticated: true });
-    // } else {
-    //   alert("Log in failed");
-    //   alert(error);
-    // }
   };
 
-  const logout = () => {
+  const processLogout = async () => {
+    const { error } = await supabase.auth.signOut(); // removes session data
+    setUser({ ...user, name: "", isAuthenticated: false });
+    setSessionData({ signedOut: "true" });
     alert("Logged out!");
-    setUser({ ...user, isAuthenticated: false });
   };
 
   return (
-    <AuthContext.Provider value={{ user, processLogin, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        processLogin,
+        processLogout,
+        sessionData,
+        sessionCheck,
+        setSessionCheck,
+      }}
+    >
       {/*  wrap admin pages inside here */}
       <>
         {/* <Login /> */}
@@ -161,7 +204,10 @@ export const AuthWrapper = ({
               </>
             }
           ></Route>
-          <Route path="/login" element={<Login />}></Route>
+          <Route
+            path="/login"
+            element={<Login user={user} setUser={setUser} />}
+          ></Route>
         </Routes>
         <Outlet />
       </>
