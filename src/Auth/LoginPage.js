@@ -1,13 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "./AuthWrapper";
 import { useState, useEffect } from "react";
+import supabase from "../supabase";
 
 function LoginPage({ user, setUser }) {
   const navigate = useNavigate();
-  const { processLogin, sessionData, sessionCheck, setSessionCheck } =
-    useAdminAuth(); // custom hook for Admin Authentication Context
-  //   const test = useAdminAuth();
-  //   console.log(test);
+  const {
+    processLogin,
+    sessionData,
+    sessionCheck,
+    setSessionCheck,
+    authRouteRedirect,
+  } = useAdminAuth(); // custom hook for Admin Authentication Context
+
   // const [formData, dispatch] = useReducer(reducer, {
   //   userName: "",
   //   password: "",
@@ -17,48 +22,59 @@ function LoginPage({ user, setUser }) {
   const [inputPassword, setInputPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // function reducer(formData, newItem) {
-  //   return { ...formData, newItem };
-  // }
-
-  // if (sessionData.length === 0) {
-  //   return <h1>Checking session</h1>;
-  // }
-
   useEffect(
     function () {
-      function checkSession() {
-        // if (sessionData !== undefined) {
-        //   setUser({ ...user, isAuthenticated: true }); // this triggers an infinite loop for some reason
-        //   // console.log("user authenticated");
-        //   console.log(sessionData);
-        // }
+      async function checkSession() {
+        const { data: session, error } = await supabase.auth.getSession();
 
-        // if (sessionData.length === 0) {
-        //   return <h1>Checking session...</h1>;
-        // }
+        console.log(session);
 
-        if (sessionData.beforeFetchData === "true") {
+        if (session.session === null) {
           console.log(
-            "Session data not loaded from supabase yet but react component rendered already (race condition)"
+            "(LoginPage POV) sessionData.session === null, meaning no session received from supabase"
           );
-
-          // return () => {
-          //   <h1>Checking session...</h1>;
-          // };
-        }
-
-        if (sessionData.session !== null) {
+          setUser({ ...user, isAuthenticated: false });
+          // if there is an existing session from supabase
+        } else if (session.session !== null) {
           setUser({ ...user, isAuthenticated: true });
-          navigate("/admin");
+          navigate(authRouteRedirect);
+        } else {
+          // to catch any other edge cases
+          alert(
+            "(LoginPage POV) There was an error checking session data from supabase"
+          );
         }
 
-        console.log(sessionData);
+        // // this if condition checks if data is fetched from supabase
+        // if (sessionData.beforeFetchData === "true") {
+        //   console.log(
+        //     "(LoginPage POV) sessionData.beforeFetchData === true, meaning data not fetched from supabase yet"
+        //   );
+        // } else {
+        //   // if there is no session from supabase
+        //   if (session.session === null) {
+        //     console.log(
+        //       "(LoginPage POV) sessionData.session === null, meaning no session received from supabase"
+        //     );
+        //     setUser({ ...user, isAuthenticated: false });
+        //     // if there is an existing session from supabase
+        //   } else if (session.session !== null) {
+        //     setUser({ ...user, isAuthenticated: true });
+        //   } else {
+        //     // to catch any other edge cases
+        //     alert(
+        //       "(LoginPage POV) There was an error checking session data from supabase"
+        //     );
+        //   }
+        // }
 
-        if (user.isAuthenticated === false) {
-          // alert("You are not logged in to admin yet!");
-          // navigate("/admin/login");
-        }
+        // console.log("(LoginPage POV) user:", user);
+        // console.log("(LoginPage POV) session:", sessionData);
+
+        // if (user.isAuthenticated === false) {
+        //   // alert("You are not logged in to admin yet!");
+        //   navigate("/admin/login");
+        // }
       }
 
       checkSession();
@@ -69,7 +85,7 @@ function LoginPage({ user, setUser }) {
   const handleSubmit = async () => {
     try {
       await processLogin(inputUsername, inputPassword);
-      navigate("/admin");
+      navigate(authRouteRedirect);
     } catch (error) {
       setErrorMessage("Wrong email/password");
       // console.log(error);

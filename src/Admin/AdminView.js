@@ -51,8 +51,14 @@ function AdminView({
   setUser,
 }) {
   const navigate = useNavigate();
-  const { processLogout, sessionData, sessionCheck, setSessionCheck } =
-    useAdminAuth();
+  const {
+    processLogout,
+    sessionData,
+    sessionCheck,
+    setSessionCheck,
+    authRouteRedirect,
+    setAuthRouteRedirect,
+  } = useAdminAuth();
   // console.log(sessionData);
   // const [sessionCheck, setSessionCheck] = useState(false);
   // setSessionCheck(!sessionCheck);
@@ -60,40 +66,39 @@ function AdminView({
   useEffect(
     function () {
       function checkSession() {
-        // if (sessionData !== undefined) {
-        //   setUser({ ...user, isAuthenticated: true }); // this triggers an infinite loop for some reason
-        //   // console.log("user authenticated");
-        //   console.log(sessionData);
+        // // this if condition checks if data is fetched from supabase
+        // if (sessionData.beforeFetchData === "true") {
+        //   console.log(
+        //     "(AdminView POV) sessionData.beforeFetchData === true, meaning data not fetched from supabase yet"
+        //   );
+        // } else {
+        //   // if there is no session from supabase
+        //   if (sessionData.session === null) {
+        //     console.log(
+        //       "(AdminView POV) sessionData.session === null, meaning no session received from supabase"
+        //     );
+        //     setUser({ ...user, isAuthenticated: false });
+        //     // if there is an existing session from supabase
+        //   } else if (sessionData.session !== null) {
+        //     setUser({ ...user, isAuthenticated: true });
+        //   } else {
+        //     // to catch any other edge cases
+        //     alert(
+        //       "(AdminView POV) There was an error checking session data from supabase"
+        //     );
+        //   }
         // }
 
-        // if (sessionData.length === 0) {
-        //   return <h1>Checking session...</h1>;
+        // console.log("(AdminView POV) user:", user);
+        // console.log("(AdminView POV) session:", sessionData);
+
+        // if (user.isAuthenticated === false) {
+        //   // alert("You are not logged in to admin yet!");
+        //   navigate("/admin/login");
         // }
-
-        if (sessionData.beforeFetchData === "true") {
-          console.log(
-            "Session data not loaded from supabase yet but react component rendered already (race condition)"
-          );
-
-          // return () => {
-          //   <h1>Checking session...</h1>;
-          // };
-        }
-
-        // if (sessionData.signedOut === "true") {
-        //   alert("please log in as admin");
-        // }
-
-        if (sessionData.session !== null) {
-          setUser({ ...user, isAuthenticated: true }); // problematic code causing login bypass w/o credentials
-          console.log(sessionData.session);
-        }
-
-        console.log(sessionData);
-        // console.log(sessionData.session);
 
         if (user.isAuthenticated === false) {
-          // alert("You are not logged in to admin yet!");
+          setAuthRouteRedirect("/admin");
           navigate("/admin/login");
         }
       }
@@ -103,41 +108,14 @@ function AdminView({
     [sessionCheck]
   );
 
-  useEffect(() => {
-    setSessionCheck(!sessionCheck);
-  }, []);
-
   // useEffect(() => {
-  //   while (sessionData.beforeFetchData === "true") {
-  //     setSessionCheck(!sessionCheck);
-  //     console.log("anyhow");
-  //   }
-  // }, []);
-
-  // function checkAdmin() {
-  //   if (sessionData.beforeFetchData === "true") {
-  //     setSessionCheck(!sessionCheck);
-  //   }
-  // }
-
-  // if (sessionData.beforeFetchData === "true") {
   //   setSessionCheck(!sessionCheck);
-  // }
+  // }, []);
 
   function handleLogout() {
     processLogout();
     navigate("/");
   }
-
-  // function checkAdmin() {
-  //   if (user.isAuthenticated === false) {
-  //     // alert("You are not logged in to admin yet!");
-  //     navigate("/admin/login");
-  //   }
-  //   console.log("user authenticated?", user.isAuthenticated);
-  // }
-
-  // checkAdmin();
 
   return (
     <>

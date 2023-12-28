@@ -61,6 +61,7 @@ export const AuthWrapper = ({
   const [sessionData, setSessionData] = useState({ beforeFetchData: "true" });
   const [sessionUpdate, setSessionUpdate] = useState(false);
   const [sessionCheck, setSessionCheck] = useState(false);
+  const [authRouteRedirect, setAuthRouteRedirect] = useState(""); // depending on which route is accessed by user fitst, sets auth route to redirect to after login
 
   // useEffect(async () => {
   //   const { data: session, error } = await supabase.auth.getSession();
@@ -128,6 +129,8 @@ export const AuthWrapper = ({
         sessionData,
         sessionCheck,
         setSessionCheck,
+        authRouteRedirect,
+        setAuthRouteRedirect,
       }}
     >
       {/*  wrap admin pages inside here */}
