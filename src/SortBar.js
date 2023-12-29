@@ -115,41 +115,45 @@ function SortBar({
   }
 
   return (
-    <form>
-      <ul style={{ listStyle: "None" }}>
-        Sort by: (Random by default)
-        <li>
-          <label>
-            <input
-              type="radio"
-              checked={alphabetCheck}
-              onChange={() => handleAlphabet()}
-            />
-            Alphabet (A-Z)
-          </label>
-        </li>
-        <li>
-          <label>
-            <input
-              type="radio"
-              checked={recentCheck}
-              onChange={() => handleRecent()}
-            />
-            Recently Added
-          </label>
-        </li>
-        <li>
-          <label>
-            <input
-              type="radio"
-              checked={priceCheck}
-              onChange={() => handlePrice()}
-            />
-            Price (lowest to highest)
-          </label>
-        </li>
-      </ul>
-    </form>
+    <>
+      <form>
+        <ul style={{ listStyle: "None" }}>
+          Sort by: (Random by default)
+          <li>
+            <label>
+              <input
+                type="radio"
+                checked={alphabetCheck}
+                onChange={() => handleAlphabet()}
+              />
+              Alphabet (A-Z)
+            </label>
+          </li>
+          <li>
+            <label>
+              <input
+                type="radio"
+                checked={recentCheck}
+                onChange={() => handleRecent()}
+              />
+              Recently Added
+            </label>
+          </li>
+          <li>
+            <label>
+              <input
+                type="radio"
+                checked={priceCheck}
+                onChange={() => handlePrice()}
+              />
+              Price (lowest to highest)
+            </label>
+          </li>
+        </ul>
+      </form>
+      <span>Alphabet (Z-A)</span>
+      <span>Price (highest to lowest)</span>
+    </>
   );
 }
 

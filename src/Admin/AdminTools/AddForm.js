@@ -88,6 +88,35 @@ function AddForm({
   async function handleCategorySubmit(e) {
     e.preventDefault();
 
+    // if (newCategoryInput === "") {
+    //   alert("You have not typed in anything yet!");
+    // } else {
+    //   // check if it is duplicate (string match, irregardless of upper/lowercase)
+    //   const gotDuplicateCategory = categoryList.some((object) => {
+    //     if (object.category.toLowerCase() === newCategoryInput.toLowerCase()) {
+    //       return true;
+    //     }
+    //     return false;
+    //   });
+
+    //   if (gotDuplicateCategory) {
+    //     alert("The category you typed in already exists!");
+    //   } else {
+    //     const response = window.confirm("Confirm your choice");
+    //     if (response) {
+    //       const { data: newCategory, error } = await supabase
+    //         .from("CategoryList")
+    //         .insert([{ category: newCategoryInput }])
+    //         .select();
+
+    //       // console.log("error", error);
+    //       // console.log
+    //       setCategoryList([...categoryList, newCategory[0]]); // not working, error: setState is not a function
+    //       setNewCategoryInput("");
+    //     }
+    //   }
+    // }
+
     if (sessionData === undefined) {
       alert("You are not logged in as an admin to perform the action!");
     } else {

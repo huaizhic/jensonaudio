@@ -2,7 +2,7 @@ function Banner() {
   return (
     <div
       style={{
-        backgroundImage: `url("backgroundBanner.jpg")`,
+        backgroundImage: `url("https://aykgozlgavkkuyxfksoi.supabase.co/storage/v1/object/public/miscellaneous/backgroundBanner.jpg?t=2023-12-28T13%3A11%3A43.764Z")`,
         height: "220px",
         width: "auto",
         textAlign: "center",

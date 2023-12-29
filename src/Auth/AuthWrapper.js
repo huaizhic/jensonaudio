@@ -63,6 +63,8 @@ export const AuthWrapper = ({
   const [sessionCheck, setSessionCheck] = useState(false);
   const [authRouteRedirect, setAuthRouteRedirect] = useState(""); // depending on which route is accessed by user fitst, sets auth route to redirect to after login
 
+  const [productRerender, setProductRerender] = useState(false);
+
   // useEffect(async () => {
   //   const { data: session, error } = await supabase.auth.getSession();
   //   setSessionData(session);
@@ -195,6 +197,8 @@ export const AuthWrapper = ({
                   setCatalog={setCatalog}
                   fetchData={fetchData}
                   setFetchData={setFetchData}
+                  productRerender={productRerender}
+                  setProductRerender={setProductRerender}
                 />
                 <br></br>
                 <br></br>
@@ -202,7 +206,9 @@ export const AuthWrapper = ({
                   catalog={catalog}
                   categoryList={categoryList}
                   user={user}
-                  setUser={setUser}
+                  setCatalog={setCatalog}
+                  productRerender={productRerender}
+                  setProductRerender={setProductRerender}
                 />
               </>
             }

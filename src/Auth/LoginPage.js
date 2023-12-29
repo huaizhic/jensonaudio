@@ -117,6 +117,10 @@ function LoginPage({ user, setUser }) {
           </button> */}
         </div>
         {errorMessage ? <div className="loginError">{errorMessage}</div> : null}
+        <br></br>
+        <span>Reset password/email (coming soon)</span>
+        <br></br>
+        <span>Log in with magic link (coming soon)</span>
       </div>
     </div>
   );

@@ -93,7 +93,12 @@ function Header({
           gap: "250px",
         }}
       >
-        <img src="jenson.jpg" height="30" width="160" alt="Jenson Audio logo" />
+        <img
+          src="https://aykgozlgavkkuyxfksoi.supabase.co/storage/v1/object/public/miscellaneous/logo.jpg?t=2023-12-28T13%3A11%3A04.280Z"
+          height="30"
+          width="160"
+          alt="Jenson Audio logo"
+        />
         <div>
           {headerButtonArray.map((button) => (
             <HeaderButton button={button} />

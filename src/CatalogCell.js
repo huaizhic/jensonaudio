@@ -2,6 +2,11 @@ import { Link } from "react-router-dom";
 
 function CatalogCell({ product, productTitle, productPrice, productCategory }) {
   // console.log({ FakeCatalogData.ProductName });
+  // if (product.media !== null) {
+  //   console.log(product.media);
+  //   console.log(product.media[0]);
+  // }
+
   return (
     <div
       style={{
@@ -12,7 +17,18 @@ function CatalogCell({ product, productTitle, productPrice, productCategory }) {
         maxWidth: "400px",
       }}
     >
-      {/* <img src={Image} height="250" width="250" /> */}
+      {product.media === null ? (
+        <img
+          src={
+            "https://aykgozlgavkkuyxfksoi.supabase.co/storage/v1/object/public/miscellaneous/noImageAvailable.jpg?t=2023-12-28T13%3A19%3A07.796Z"
+          }
+          height="250"
+          width="250"
+        />
+      ) : (
+        <img src={product.media[0]} height="350" width="350"></img>
+      )}
+
       <h1>
         <Link to={`product/${product.productTitle}`}>
           {product.productTitle}
