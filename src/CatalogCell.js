@@ -17,7 +17,7 @@ function CatalogCell({ product, productTitle, productPrice, productCategory }) {
         maxWidth: "400px",
       }}
     >
-      {product.media === null ? (
+      {product.media === null || product.media.length === 0 ? (
         <img
           src={
             "https://aykgozlgavkkuyxfksoi.supabase.co/storage/v1/object/public/miscellaneous/noImageAvailable.jpg?t=2023-12-28T13%3A19%3A07.796Z"

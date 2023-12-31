@@ -97,3 +97,13 @@
 .adminLogout {
   text-align: center;
 }
+
+.imagesTemplate {
+  display: flex;
+  flex-direction: row;
+  /* border: solid; */
+}
+
+.images {
+  border: solid;
+}
