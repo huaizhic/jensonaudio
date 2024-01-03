@@ -3,14 +3,6 @@ import { useState, useEffect } from "react";
 import { useAdminAuth } from "../../Auth/AuthWrapper";
 import supabase from "../../supabase";
 
-// const imagesTemplate = [
-//   { name: "image1" },
-//   { name: "image2" },
-//   { name: "image3" },
-//   { name: "image4" },
-//   { name: "image5" },
-// ];
-
 function ProductEdit({
   catalog,
   categoryList,
@@ -31,16 +23,20 @@ function ProductEdit({
   const [inputDesc, setInputDesc] = useState("unset");
 
   const [images, setImages] = useState([]);
-  const [image1preview, setImage1preview] = useState("");
+  // to store image URL
+  const [slot1preview, setSlot1preview] = useState(""); // change name to media slot 1
   const [image2preview, setImage2preview] = useState("");
   const [image3preview, setImage3preview] = useState("");
   const [image4preview, setImage4preview] = useState("");
   const [image5preview, setImage5preview] = useState("");
-  const [image1, setImage1] = useState();
+  // to store file object
+  const [slot1, setSlot1] = useState();
   const [image2, setImage2] = useState();
   const [image3, setImage3] = useState();
   const [image4, setImage4] = useState();
   const [image5, setImage5] = useState();
+  // flag to load media and stop infinite re-render
+  const [isMediaLoaded, setIsMediaLoaded] = useState(false);
 
   useEffect(
     function () {
@@ -81,19 +77,20 @@ function ProductEdit({
     // console.log("selectedProduct:", selectedProduct);
   }
 
+  // id is for array indexing purposes
   const imagesTemplate = [
     {
       id: 0,
-      name: "image1",
-      preview: image1preview,
-      setPreview: setImage1preview,
+      name: "Image/Video 1",
+      preview: slot1preview,
+      setPreview: setSlot1preview,
       originalImage: selectedProduct.media[0],
-      newFile: image1,
-      setNewFile: setImage1,
+      newFile: slot1,
+      setNewFile: setSlot1,
     },
     {
       id: 1,
-      name: "image2",
+      name: "Image 2",
       preview: image2preview,
       setPreview: setImage2preview,
       originalImage: selectedProduct.media[1],
@@ -102,7 +99,7 @@ function ProductEdit({
     },
     {
       id: 2,
-      name: "image3",
+      name: "Image 3",
       preview: image3preview,
       setPreview: setImage3preview,
       originalImage: selectedProduct.media[2],
@@ -111,7 +108,7 @@ function ProductEdit({
     },
     {
       id: 3,
-      name: "image4",
+      name: "Image 4",
       preview: image4preview,
       setPreview: setImage4preview,
       originalImage: selectedProduct.media[3],
@@ -120,7 +117,7 @@ function ProductEdit({
     },
     {
       id: 4,
-      name: "image5",
+      name: "Image 5",
       preview: image5preview,
       setPreview: setImage5preview,
       originalImage: selectedProduct.media[4],
@@ -129,8 +126,10 @@ function ProductEdit({
     },
   ];
 
+  // incomplete, will trigger infinite loop for products with no media
   if (
-    image1preview === "" &&
+    isMediaLoaded === false &&
+    slot1preview === "" &&
     image2preview === "" &&
     image3preview === "" &&
     image4preview === "" &&
@@ -145,6 +144,7 @@ function ProductEdit({
     //     ? { ...imageParam, state: imageParam.setState("") }
     //     : imageParam
     // );
+    setIsMediaLoaded(!isMediaLoaded);
   }
 
   function fillInputs(selectedProduct) {
@@ -164,13 +164,18 @@ function ProductEdit({
   async function handleSubmit(e) {
     e.preventDefault();
 
-    imageSubmission();
+    // imageSubmission();
 
     if (
       inputTitle === selectedProduct.productTitle &&
       inputPrice === selectedProduct.productPrice &&
       inputCategory === selectedProduct.productCategory &&
-      inputDesc === selectedProduct.productDescription
+      inputDesc === selectedProduct.productDescription &&
+      slot1 === undefined &&
+      image2 === undefined &&
+      image3 === undefined &&
+      image4 === undefined &&
+      image5 === undefined
     ) {
       alert("You have not changed anything so there is no need to update!");
     } else {
@@ -195,6 +200,8 @@ function ProductEdit({
         } else {
           const response = window.confirm("Confirm changes");
           if (response) {
+            imageSubmission();
+
             // update supabase
             const { data: modifiedProduct, error } = await supabase
               .from("CatalogList")
@@ -272,49 +279,71 @@ function ProductEdit({
     );
     console.log("toUpload:", toUpload);
 
+    let updatedMediaArray = [];
+
     for (let i = 0; i < toUpload.length; i++) {
       console.log("toUpload[i].newFile", toUpload[i].newFile);
       console.log("toUpload[i].preview", toUpload[i].preview);
 
-      console.log(
-        "intended supabase filepath:",
-        `${selectedProduct.productTitle}/${selectedProduct.productTitle}(image${
-          toUpload[i].id + 1
-        })`
-      );
-
-      // upload files to supabase (works)
-      const { data, error } = await supabase.storage
-        .from("catalog-public")
-        .upload(
-          `${selectedProduct.productTitle}/${
-            selectedProduct.productTitle
-          }(image${toUpload[i].id + 1})`,
-          toUpload[i].newFile,
-          { upsert: true }
-        );
-
-      // console.log("supabase response data:", data);
-      // console.log("supabase response error (if any):", error);
-
-      // get their URLs
-      const { data: link } = supabase.storage
-        .from("catalog-public")
-        .getPublicUrl(
+      if (toUpload[i].newFile === "delete current image with no replacement") {
+        // alert("delete feature still in progress!");
+        // delete current product image from supabase
+        const { data: removeData, error } = await supabase.storage
+          .from("catalog-public")
+          .remove([
+            `${selectedProduct.productTitle}/${
+              selectedProduct.productTitle
+            }(image${toUpload[i].id + 1})`,
+          ]);
+        console.log("removeData: ", removeData);
+        console.log("removeData error, if any:", error);
+        // amend product.media array slot to ""
+        updatedMediaArray = selectedProduct.media;
+        updatedMediaArray[toUpload[i].id] = "";
+      }
+      // for replacing exising image and uploading empty slot
+      else {
+        // upload updated product image to supabase
+        console.log(
+          "intended supabase filepath:",
           `${selectedProduct.productTitle}/${
             selectedProduct.productTitle
           }(image${toUpload[i].id + 1})`
         );
 
-      console.log("URL:", link);
+        // upload files to supabase (works)
+        // upsert will replace existing image
+        const { data, error } = await supabase.storage
+          .from("catalog-public")
+          .upload(
+            `${selectedProduct.productTitle}/${
+              selectedProduct.productTitle
+            }(image${toUpload[i].id + 1})`,
+            toUpload[i].newFile,
+            { cacheControl: "10", upsert: true }
+          );
 
-      // identify and retrieve product from catalogList
-      // update media column of product in catalogList
-      console.log("selectedProduct.media array: ", selectedProduct.media);
-      let updatedMediaArray = selectedProduct.media;
-      updatedMediaArray[toUpload[i].id] = link.publicUrl;
-      console.log("updatedMediaArray:", updatedMediaArray);
+        console.log("supabase response data:", data);
+        // console.log("supabase response error (if any):", error);
 
+        // get their URLs
+        const { data: link } = supabase.storage
+          .from("catalog-public")
+          .getPublicUrl(
+            `${selectedProduct.productTitle}/${
+              selectedProduct.productTitle
+            }(image${toUpload[i].id + 1})`
+          );
+
+        console.log("URL:", link);
+
+        // identify and retrieve product from catalogList
+        // update media column of product in catalogList
+        console.log("selectedProduct.media array: ", selectedProduct.media);
+        updatedMediaArray = selectedProduct.media;
+        updatedMediaArray[toUpload[i].id] = link.publicUrl;
+        console.log("updatedMediaArray:", updatedMediaArray);
+      }
       const { data: updatedProduct, error: updatedProductError } =
         await supabase
           .from("CatalogList")
@@ -323,6 +352,28 @@ function ProductEdit({
 
       console.log("updatedProduct:", updatedProduct); // the media array should be updated correctly
       console.log("updatedProductError, if any:", updatedProductError); // catching the error
+
+      // add in additional logic to remove old image from supabase if it is a replace operation (to free up space)
+
+      // re-render product view (still doesn't work, probably need useEffect in product.js)
+      setCatalog(
+        catalog.map((product) =>
+          product.id === updatedProduct[0].id
+            ? { ...product, media: updatedMediaArray }
+            : product
+        )
+      );
+
+      console.log("updatedProduct[0]:", updatedProduct[0]); // the media array should be updated correctly
+      setProductRerender(!productRerender);
+    }
+  }
+
+  function handleDeleteChange(setPreview, setNewFile, preview) {
+    // condition to prevent marking an already empty slot for deleting in supabase
+    if (preview !== "") {
+      setPreview("");
+      setNewFile("delete current image with no replacement");
     }
   }
 
@@ -339,6 +390,7 @@ function ProductEdit({
                 <>
                   <div className="images">
                     <h3>{image.name}</h3>
+
                     <img src={image.preview} height="100" width="100"></img>
                     <input
                       type="file"
@@ -353,6 +405,19 @@ function ProductEdit({
                         )
                       }
                     ></input>
+                    <button
+                      type="button"
+                      // this onClick only triggers if type="button" is used. Else, form onSubmit would take priority
+                      onClick={() =>
+                        handleDeleteChange(
+                          image.setPreview,
+                          image.setNewFile,
+                          image.preview
+                        )
+                      }
+                    >
+                      Delete
+                    </button>
                   </div>
                 </>
               ))}

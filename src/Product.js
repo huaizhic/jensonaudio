@@ -67,7 +67,8 @@ function Product({
   return (
     <>
       <div className="Product">
-        {selectedProduct.media === null ||
+        {selectedProduct.media[0] === "" ||
+        selectedProduct.media === null ||
         selectedProduct.media.length === 0 ? (
           <img
             src="https://aykgozlgavkkuyxfksoi.supabase.co/storage/v1/object/public/miscellaneous/noImageAvailable.jpg?t=2023-12-28T13%3A19%3A07.796Z"
@@ -75,9 +76,11 @@ function Product({
             width="350"
           ></img>
         ) : (
-          selectedProduct.media.map((eachMedia) => (
-            <img src={eachMedia} height="350" width="350"></img>
-          ))
+          selectedProduct.media.map((eachMedia) =>
+            eachMedia === "" ? null : (
+              <img src={eachMedia} height="350" width="350"></img>
+            )
+          )
         )}
 
         <h1>Product Title: {id}</h1>
