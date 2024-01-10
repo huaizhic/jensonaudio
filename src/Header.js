@@ -1,5 +1,6 @@
 import { useState } from "react";
 import HeaderButton from "./HeaderButton";
+import CartList from "./Cart/CartList";
 
 const headerButtonArray = [
   { Name: "Home", RoutingName: "" },
@@ -30,8 +31,12 @@ function Header({
   setSearchInput,
   searchResult,
   setSearchResult,
+  cartOpen,
+  setCartOpen,
 }) {
   // const [searchInput, setSearchInput] = useState("");
+  const [cartButton, setCartButton] = useState(false);
+  // const { cartOpen, setCartOpen } = useCart();
 
   function handleSubmit(e) {
     // *** currently, search function only searches the entire unfiltered catalog, unsorted.
@@ -90,7 +95,7 @@ function Header({
           height: "40px",
           display: "flex",
           justifyContent: "Center",
-          gap: "250px",
+          gap: "100px",
         }}
       >
         <img
@@ -113,6 +118,20 @@ function Header({
           ></input>
           <button>Search</button>
         </form>
+        <button onClick={() => setCartOpen(!cartOpen)}>
+          <img
+            src="https://uxwing.com/wp-content/themes/uxwing/download/e-commerce-currency-shopping/shopping-cart-icon.png"
+            height="20"
+          ></img>
+        </button>
+        {/* {cartButton ? (
+          <>
+            <button onClick={() => setCartButton(!cartButton)}>Cart</button>
+            <CartList />
+          </>
+        ) : (
+          <button onClick={() => setCartButton(!cartButton)}>Cart</button>
+        )} */}
       </header>
     </>
   );

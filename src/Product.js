@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import supabase from "./supabase";
+import { useCart } from "./Cart/CartWrapper";
+import { useAdminAuth } from "./Auth/AuthWrapper";
 
 function Product({
   catalog,
@@ -10,8 +12,13 @@ function Product({
   productRerender,
   setProductRerender,
 }) {
+  const { cart, setCart } = useCart();
+  const { privateList, setPrivateList } = useAdminAuth();
+
   const [selectedProduct, setSelectedProduct] = useState();
   // const [productRerender, setProductRerender] = useState(false);
+  const { id } = useParams();
+  console.log("useParams id:", id);
 
   useEffect(function () {
     async function getCatalog() {
@@ -21,25 +28,47 @@ function Product({
       setCatalog(Catalog);
       // console.log(CatalogList);
     }
+    async function getPrivateList() {
+      const { data, error } = await supabase.from("PrivateList").select("*");
+      console.log("privateList:", data);
+      setPrivateList(data);
+    }
+    getPrivateList();
     getCatalog();
   }, []);
 
   useEffect(
     function () {
       function getProduct() {
-        let selectedProduct = catalog.filter((product) =>
-          product.productTitle === id ? product : null
-        )[0];
-        setSelectedProduct(selectedProduct);
-        // console.log("catalog", catalog);
-        // console.log("selectedProduct", selectedProduct);
+        let productPublic = catalog.some(
+          (product) => product.productTitle === id
+        );
+        if (productPublic) {
+          let selectedProduct = catalog.filter((product) =>
+            product.productTitle === id ? product : null
+          )[0];
+          setSelectedProduct(selectedProduct);
+          // console.log("catalog", catalog);
+          // console.log("selectedProduct", selectedProduct);
+        } else {
+          let productPrivate = privateList.some(
+            (product) => product.productTitle === id
+          );
+          if (productPrivate) {
+            let selectedProduct = privateList.filter((product) =>
+              product.productTitle === id ? product : null
+            )[0];
+            setSelectedProduct(selectedProduct);
+          } else {
+            console.log("There has been an error fetching product details");
+            alert("There has been an error fetching product details");
+          }
+        }
       }
       getProduct();
     },
     [productRerender]
   );
-
-  const { id } = useParams();
 
   // console.log("selectedproduct:", selectedProduct);
   // console.log("catalog:", catalog);
@@ -50,16 +79,37 @@ function Product({
   // as the components tend to render before the data is fetched from supabase, an error will occur complaining that product details are undefined.
   // thus, this if condition forces the components to wait for the data to be fetched from supabase before rendering,
   // successfully loading the product details.
-  if (catalog[0] === undefined) {
+
+  if (catalog[0] === undefined && privateList === undefined) {
     return <h1>Still loading...</h1>;
   } else {
     if (selectedProduct === undefined) {
       // setProductRerender(!productRerender);
-      setSelectedProduct(
-        catalog.filter((product) =>
-          product.productTitle === id ? product : null
-        )[0]
+      let productPublic = catalog.some(
+        (product) => product.productTitle === id
       );
+
+      let productPrivate = privateList.some(
+        (product) => product.productTitle === id
+      );
+
+      if (productPublic) {
+        setSelectedProduct(
+          catalog.filter((product) =>
+            product.productTitle === id ? product : null
+          )[0]
+        );
+      } else if (productPrivate) {
+        setSelectedProduct(
+          privateList.filter((product) =>
+            product.productTitle === id ? product : null
+          )[0]
+        );
+      } else {
+        console.log("There has been an error fetching product details (1)");
+        alert("There has been an error fetching product details(1)");
+      }
+
       return <h1>Still loading selectedproduct...</h1>;
     }
   }
@@ -97,7 +147,9 @@ function Product({
           </a>
         </button>
         <button>Buy Now (Not working yet)</button>
-        <button>Add to cart (Not working yet)</button>
+        <button onClick={() => setCart([...cart, selectedProduct])}>
+          Add to cart (Early Build)
+        </button>
         <h2>Recommended products: (coming soon)</h2>
       </div>
     </>

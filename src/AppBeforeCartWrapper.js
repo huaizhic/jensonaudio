@@ -18,7 +18,6 @@ import { AuthWrapper } from "./Auth/AuthWrapper";
 import Login from "./Auth/LoginPage";
 import AddForm from "./Admin/AdminTools/AddForm";
 import CartList from "./Cart/CartList";
-import { CartWrapper } from "./Cart/CartWrapper";
 
 function App() {
   const [catalog, setCatalog] = useState([]);
@@ -50,8 +49,6 @@ function App() {
   const [fetchData, setFetchData] = useState(false);
 
   const [user, setUser] = useState({ name: "", isAuthenticated: false });
-
-  const [cartOpen, setCartOpen] = useState(false);
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -88,64 +85,85 @@ function App() {
         setSearchInput={setSearchInput}
         searchResult={searchResult}
         setSearchResult={setSearchResult}
-        cartOpen={cartOpen}
-        setCartOpen={setCartOpen}
       />
       {/* <CartList /> */}
       <Routes>
         <Route
-          path="/*"
+          path="/"
           element={
-            <CartWrapper
+            <>
+              <Banner />
+              <main style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
+                <Sidebar
+                  categoryList={categoryList}
+                  setCategoryList={setCategoryList}
+                  catalog={catalog}
+                  setCatalog={setCatalog}
+                  catalogUnfiltered={catalogUnfiltered}
+                  setCatalogUnfiltered={setCatalogUnfiltered}
+                  catalogFilterView={catalogFilterView}
+                  setCatalogFilterView={setCatalogFilterView}
+                  catalogFilterRerender={catalogFilterRerender}
+                  setCatalogFilterRerender={setCatalogFilterRerender}
+                  catalogFilterTarget={catalogFilterTarget}
+                  setCatalogFilterTarget={setCatalogFilterTarget}
+                  sortStatus={sortStatus}
+                  setSortStatus={setSortStatus}
+                  alphabetCheck={alphabetCheck}
+                  setAlphabetCheck={setAlphabetCheck}
+                  recentCheck={recentCheck}
+                  setRecentCheck={setRecentCheck}
+                  priceCheck={priceCheck}
+                  setPriceCheck={setPriceCheck}
+                  allCheck={allCheck}
+                  setAllCheck={setAllCheck}
+                  searchClick={searchClick}
+                  setSearchClick={setSearchClick}
+                  searchResult={searchResult}
+                  setSearchResult={setSearchResult}
+                />
+                <CatalogList
+                  catalog={catalog}
+                  setCatalog={setCatalog}
+                  catalogUnfiltered={catalogUnfiltered}
+                  setCatalogUnfiltered={setCatalogUnfiltered}
+                  catalogFilterView={catalogFilterView}
+                  setCatalogFilterView={setCatalogFilterView}
+                  catalogFilterRerender={catalogFilterRerender}
+                  setCatalogFilterRerender={setCatalogFilterRerender}
+                  catalogFilterTarget={catalogFilterTarget}
+                  setCatalogFilterTarget={setCatalogFilterTarget}
+                  searchClick={searchClick}
+                  setSearchClick={setSearchClick}
+                  searchInput={searchInput}
+                  setSearchInput={setSearchInput}
+                  allCheck={allCheck}
+                  setAllCheck={setAllCheck}
+                  categoryList={categoryList}
+                  setCategoryList={setCategoryList}
+                  setAlphabetCheck={setAlphabetCheck}
+                  setRecentCheck={setRecentCheck}
+                  setPriceCheck={setPriceCheck}
+                  fetchData={fetchData}
+                  setFetchData={setFetchData}
+                />
+              </main>
+            </>
+          }
+        />
+        <Route path="/about" element={<About />} />
+        <Route
+          path="/product/:id"
+          element={
+            <Product
               catalog={catalog}
               setCatalog={setCatalog}
-              catalogUnfiltered={catalogUnfiltered}
-              setCatalogUnfiltered={setCatalogUnfiltered}
-              catalogFilterView={catalogFilterView}
-              setCatalogFilterView={setCatalogFilterView}
-              alphabetCheck={alphabetCheck}
-              setAlphabetCheck={setAlphabetCheck}
-              recentCheck={recentCheck}
-              setRecentCheck={setRecentCheck}
-              priceCheck={priceCheck}
-              setPriceCheck={setPriceCheck}
-              setAllCheck={setAllCheck}
-              categoryList={categoryList}
-              setCategoryList={setCategoryList}
-              searchClick={searchClick}
-              setSearchClick={setSearchClick}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              searchResult={searchResult}
-              setSearchResult={setSearchResult}
-              productTitle={productTitle}
-              setProductTitle={setProductTitle}
-              productPrice={productPrice}
-              setProductPrice={setProductPrice}
-              productCategory={productCategory}
-              setProductCategory={setProductCategory}
-              catalogFilterRerender={catalogFilterRerender}
-              setCatalogFilterRerender={setCatalogFilterRerender}
-              productEdit={productEdit}
-              setProductEdit={setProductEdit}
-              productDescription={productDescription}
-              setProductDescription={setProductDescription}
-              catalogFilterTarget={catalogFilterTarget}
-              setCatalogFilterTarget={setCatalogFilterTarget}
-              sortStatus={sortStatus}
-              setSortStatus={setSortStatus}
-              allCheck={allCheck}
               fetchData={fetchData}
               setFetchData={setFetchData}
-              user={user}
-              setUser={setUser}
-              cartOpen={cartOpen}
-              setCartOpen={setCartOpen}
             />
           }
-        ></Route>
-
-        {/* <Route path="/*" element={<ErrorPage />} /> */}
+        />
+        <Route path="/*" element={<ErrorPage />} />
         <Route
           path="/admin/*"
           element={

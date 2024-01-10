@@ -6,6 +6,8 @@ import Product from "../Product";
 // import ProductEdit from "../AdminTools/ProductEdit";
 import ProductEdit from "../Admin/AdminTools/ProductEdit";
 import Login from "./LoginPage";
+import Header from "../Header";
+import PrivateList from "../Admin/PrivateList";
 
 const AuthContext = createContext("");
 export const useAdminAuth = () => useContext(AuthContext);
@@ -64,6 +66,8 @@ export const AuthWrapper = ({
   const [authRouteRedirect, setAuthRouteRedirect] = useState(""); // depending on which route is accessed by user fitst, sets auth route to redirect to after login
 
   const [productRerender, setProductRerender] = useState(false);
+
+  const [privateList, setPrivateList] = useState(undefined);
 
   // useEffect(async () => {
   //   const { data: session, error } = await supabase.auth.getSession();
@@ -133,59 +137,86 @@ export const AuthWrapper = ({
         setSessionCheck,
         authRouteRedirect,
         setAuthRouteRedirect,
+        privateList,
+        setPrivateList,
       }}
     >
       {/*  wrap admin pages inside here */}
       <>
         {/* <Login /> */}
+        {/* <Header
+          catalog={catalog}
+          catalogUnfiltered={catalogUnfiltered}
+          setCatalogUnfiltered={setCatalogUnfiltered}
+          catalogFilterView={catalogFilterView}
+          setCatalogFilterView={setCatalogFilterView}
+          alphabetCheck={alphabetCheck}
+          setAlphabetCheck={setAlphabetCheck}
+          recentCheck={recentCheck}
+          setRecentCheck={setRecentCheck}
+          priceCheck={priceCheck}
+          setPriceCheck={setPriceCheck}
+          setAllCheck={setAllCheck}
+          categoryList={categoryList}
+          setCategoryList={setCategoryList}
+          searchClick={searchClick}
+          setSearchClick={setSearchClick}
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+          searchResult={searchResult}
+          setSearchResult={setSearchResult}
+        /> */}
         <Routes>
           <Route
             index
             element={
-              <AdminView
-                catalog={catalog}
-                setCatalog={setCatalog}
-                catalogUnfiltered={catalogUnfiltered}
-                setCatalogUnfiltered={setCatalogUnfiltered}
-                catalogFilterView={catalogFilterView}
-                setCatalogFilterView={setCatalogFilterView}
-                alphabetCheck={alphabetCheck}
-                setAlphabetCheck={setAlphabetCheck}
-                recentCheck={recentCheck}
-                setRecentCheck={setRecentCheck}
-                priceCheck={priceCheck}
-                setPriceCheck={setPriceCheck}
-                setAllCheck={setAllCheck}
-                categoryList={categoryList}
-                setCategoryList={setCategoryList}
-                searchClick={searchClick}
-                setSearchClick={setSearchClick}
-                searchInput={searchInput}
-                setSearchInput={setSearchInput}
-                searchResult={searchResult}
-                setSearchResult={setSearchResult}
-                productTitle={productTitle}
-                setProductTitle={setProductTitle}
-                productPrice={productPrice}
-                setProductPrice={setProductPrice}
-                productCategory={productCategory}
-                setProductCategory={setProductCategory}
-                catalogFilterRerender={catalogFilterRerender}
-                setCatalogFilterRerender={setCatalogFilterRerender}
-                productEdit={productEdit}
-                setProductEdit={setProductEdit}
-                productDescription={productDescription}
-                setProductDescription={setProductDescription}
-                catalogFilterTarget={catalogFilterTarget}
-                setCatalogFilterTarget={setCatalogFilterTarget}
-                sortStatus={sortStatus}
-                setSortStatus={setSortStatus}
-                allCheck={allCheck}
-                fetchData={fetchData}
-                setFetchData={setFetchData}
-                user={user}
-                setUser={setUser}
-              />
+              <>
+                <AdminView
+                  catalog={catalog}
+                  setCatalog={setCatalog}
+                  catalogUnfiltered={catalogUnfiltered}
+                  setCatalogUnfiltered={setCatalogUnfiltered}
+                  catalogFilterView={catalogFilterView}
+                  setCatalogFilterView={setCatalogFilterView}
+                  alphabetCheck={alphabetCheck}
+                  setAlphabetCheck={setAlphabetCheck}
+                  recentCheck={recentCheck}
+                  setRecentCheck={setRecentCheck}
+                  priceCheck={priceCheck}
+                  setPriceCheck={setPriceCheck}
+                  setAllCheck={setAllCheck}
+                  categoryList={categoryList}
+                  setCategoryList={setCategoryList}
+                  searchClick={searchClick}
+                  setSearchClick={setSearchClick}
+                  searchInput={searchInput}
+                  setSearchInput={setSearchInput}
+                  searchResult={searchResult}
+                  setSearchResult={setSearchResult}
+                  productTitle={productTitle}
+                  setProductTitle={setProductTitle}
+                  productPrice={productPrice}
+                  setProductPrice={setProductPrice}
+                  productCategory={productCategory}
+                  setProductCategory={setProductCategory}
+                  catalogFilterRerender={catalogFilterRerender}
+                  setCatalogFilterRerender={setCatalogFilterRerender}
+                  productEdit={productEdit}
+                  setProductEdit={setProductEdit}
+                  productDescription={productDescription}
+                  setProductDescription={setProductDescription}
+                  catalogFilterTarget={catalogFilterTarget}
+                  setCatalogFilterTarget={setCatalogFilterTarget}
+                  sortStatus={sortStatus}
+                  setSortStatus={setSortStatus}
+                  allCheck={allCheck}
+                  fetchData={fetchData}
+                  setFetchData={setFetchData}
+                  user={user}
+                  setUser={setUser}
+                />
+                <PrivateList />
+              </>
             }
           ></Route>
           <Route

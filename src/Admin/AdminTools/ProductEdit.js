@@ -14,8 +14,14 @@ function ProductEdit({
   const [indivProductEdit, setIndivProductEdit] = useState(true);
   const { id } = useParams(); // custom hook from react router to retrieve dynamic route generated
   const navigate = useNavigate();
-  const { sessionData, sessionCheck, authRouteRedirect, setAuthRouteRedirect } =
-    useAdminAuth();
+  const {
+    sessionData,
+    sessionCheck,
+    authRouteRedirect,
+    setAuthRouteRedirect,
+    privateList,
+    setPrivateList,
+  } = useAdminAuth();
 
   const [inputTitle, setInputTitle] = useState("unset");
   const [inputPrice, setInputPrice] = useState(NaN);
@@ -61,12 +67,26 @@ function ProductEdit({
   // console.log(selectedProduct);
 
   // catalog data not fetched in time yet
-  if (catalog[0] === undefined) {
+  if (catalog[0] === undefined && privateList === undefined) {
     return <h1>ProductEdit Still loading...</h1>;
   } else {
-    let selectedProduct = catalog.filter((product) =>
-      product.productTitle === id ? product : null
-    )[0];
+    let productPublic = catalog.some((product) => product.productTitle === id);
+    let productPrivate = privateList.some(
+      (product) => product.productTitle === id
+    );
+    if (productPublic) {
+      selectedProduct = catalog.filter((product) =>
+        product.productTitle === id ? product : null
+      )[0];
+    } else if (productPrivate) {
+      selectedProduct = privateList.filter((product) =>
+        product.productTitle === id ? product : null
+      )[0];
+    } else {
+      console.log("ProductEdit: error fetching product details");
+      alert("ProductEdit: error fetching product details");
+    }
+
     if (
       inputTitle === "unset" ||
       inputCategory === "unset" ||
@@ -126,7 +146,6 @@ function ProductEdit({
     },
   ];
 
-  // incomplete, will trigger infinite loop for products with no media
   if (
     isMediaLoaded === false &&
     slot1preview === "" &&
@@ -201,6 +220,7 @@ function ProductEdit({
           const response = window.confirm("Confirm changes");
           if (response) {
             imageSubmission();
+            console.log("catalog after image submission:", catalog); // image change is reflected
 
             // update supabase
             const { data: modifiedProduct, error } = await supabase
@@ -224,9 +244,10 @@ function ProductEdit({
                   : product
               )
             );
+            console.log("catalog after product details modification:", catalog); // image change also reflected
 
             // console.log("catalog: ", catalog);
-            setProductRerender(!productRerender);
+            setProductRerender(!productRerender); // re rendering only working for product details, not media
           }
         }
       }
@@ -273,7 +294,7 @@ function ProductEdit({
     // for the slots left untouched, do nothing  (newFile === undefined)
     // for slots with new submission, upload to supabase
 
-    // filter out slots with new submissions
+    // filter out slots with new submissions. if toUpload array is empty, below for loop will not run and imageSubmission() is done
     const toUpload = imagesTemplate.filter(
       (slot) => slot.newFile !== undefined
     );
@@ -293,7 +314,7 @@ function ProductEdit({
           .remove([
             `${selectedProduct.productTitle}/${
               selectedProduct.productTitle
-            }(image${toUpload[i].id + 1})`,
+            }(slot${toUpload[i].id + 1})`,
           ]);
         console.log("removeData: ", removeData);
         console.log("removeData error, if any:", error);
@@ -308,7 +329,7 @@ function ProductEdit({
           "intended supabase filepath:",
           `${selectedProduct.productTitle}/${
             selectedProduct.productTitle
-          }(image${toUpload[i].id + 1})`
+          }(slot${toUpload[i].id + 1})`
         );
 
         // upload files to supabase (works)
@@ -318,7 +339,7 @@ function ProductEdit({
           .upload(
             `${selectedProduct.productTitle}/${
               selectedProduct.productTitle
-            }(image${toUpload[i].id + 1})`,
+            }(slot${toUpload[i].id + 1})`,
             toUpload[i].newFile,
             { cacheControl: "10", upsert: true }
           );
@@ -332,7 +353,7 @@ function ProductEdit({
           .getPublicUrl(
             `${selectedProduct.productTitle}/${
               selectedProduct.productTitle
-            }(image${toUpload[i].id + 1})`
+            }(slot${toUpload[i].id + 1})`
           );
 
         console.log("URL:", link);
@@ -365,7 +386,7 @@ function ProductEdit({
       );
 
       console.log("updatedProduct[0]:", updatedProduct[0]); // the media array should be updated correctly
-      setProductRerender(!productRerender);
+      // setProductRerender(!productRerender);
     }
   }
 
@@ -385,44 +406,84 @@ function ProductEdit({
           <form onSubmit={(e) => handleSubmit(e)}>
             <br></br>
             <h2>Edit product details</h2>
+            <p>
+              Note: Changes will only be reflected upon clicking of 'Update'
+              button. Drag and drop to reorder coming soon
+            </p>
             <div className="imagesTemplate">
-              {imagesTemplate.map((image) => (
-                <>
-                  <div className="images">
-                    <h3>{image.name}</h3>
+              {imagesTemplate.map((image) =>
+                image.name === "Image/Video 1" ? (
+                  <>
+                    <div className="images">
+                      <h3>{image.name}</h3>
 
-                    <img src={image.preview} height="100" width="100"></img>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      // value={image.state}
-                      // multiple="multiple"
-                      onChange={(e) =>
-                        handleSingleImageChange(
-                          e,
-                          image.setPreview,
-                          image.setNewFile
-                        )
-                      }
-                    ></input>
-                    <button
-                      type="button"
-                      // this onClick only triggers if type="button" is used. Else, form onSubmit would take priority
-                      onClick={() =>
-                        handleDeleteChange(
-                          image.setPreview,
-                          image.setNewFile,
-                          image.preview
-                        )
-                      }
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </>
-              ))}
+                      <img src={image.preview} height="100" width="100"></img>
+                      <input
+                        type="file"
+                        accept="image/*, video/*"
+                        // value={image.state}
+                        // multiple="multiple"
+                        onChange={(e) =>
+                          handleSingleImageChange(
+                            e,
+                            image.setPreview,
+                            image.setNewFile
+                          )
+                        }
+                      ></input>
+                      <button
+                        type="button"
+                        // this onClick only triggers if type="button" is used. Else, form onSubmit would take priority
+                        onClick={() =>
+                          handleDeleteChange(
+                            image.setPreview,
+                            image.setNewFile,
+                            image.preview
+                          )
+                        }
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="images">
+                      <h3>{image.name}</h3>
+
+                      <img src={image.preview} height="100" width="100"></img>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        // value={image.state}
+                        // multiple="multiple"
+                        onChange={(e) =>
+                          handleSingleImageChange(
+                            e,
+                            image.setPreview,
+                            image.setNewFile
+                          )
+                        }
+                      ></input>
+                      <button
+                        type="button"
+                        // this onClick only triggers if type="button" is used. Else, form onSubmit would take priority
+                        onClick={() =>
+                          handleDeleteChange(
+                            image.setPreview,
+                            image.setNewFile,
+                            image.preview
+                          )
+                        }
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )
+              )}
             </div>
-            <div>
+            {/* <div>
               <h3>Multiple upload (not working yet)</h3>
               <input
                 type="file"
@@ -430,7 +491,7 @@ function ProductEdit({
                 multiple="multiple"
                 onChange={(e) => handleMultipleImageChange(e)}
               ></input>
-            </div>
+            </div> */}
             {/* <input
               type="file"
               multple
