@@ -112,7 +112,7 @@ function Header({
         <form onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
-            placeholder="Search product..."
+            placeholder="Search product (to revamp to sidebar)"
             value={searchInput}
             onChange={(e) => handleChange(e)}
           ></input>

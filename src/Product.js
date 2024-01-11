@@ -19,6 +19,7 @@ function Product({
   // const [productRerender, setProductRerender] = useState(false);
   const { id } = useParams();
   // console.log("useParams id:", id);
+  const [isProductLoaded, setIsProductLoaded] = useState(false);
 
   useEffect(function () {
     async function getCatalog() {
@@ -64,12 +65,13 @@ function Product({
   if (catalog[0] === undefined) {
     return <h1>Still loading...</h1>;
   } else {
-    if (selectedProduct === undefined) {
+    if (selectedProduct === undefined && isProductLoaded === false) {
       setSelectedProduct(
         catalog.filter((product) =>
           product.productTitle === id ? product : null
         )[0]
       );
+      setIsProductLoaded(!isProductLoaded);
       // } else {
 
       //   } else {

@@ -9,6 +9,7 @@ import Product from "../Product";
 import CatalogList from "../CatalogList";
 import CartList from "./CartList";
 import Checkout from "./Checkout";
+import Payment from "./Payment";
 
 const CartContext = createContext("");
 export const useCart = () => useContext(CartContext);
@@ -162,6 +163,7 @@ export const CartWrapper = ({
             }
           />
           <Route path="checkout" element={<Checkout />} />
+          <Route path="payment" element={<Payment />} />
           <Route path="/*" element={<ErrorPage />} />
         </Routes>
         <Outlet />
