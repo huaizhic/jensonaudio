@@ -5,6 +5,8 @@ import CatalogList from "../CatalogList";
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../Auth/AuthWrapper";
 import { useEffect, useState } from "react";
+import AdminSidebar from "./AdminSidebar";
+import PrivateList from "./PrivateList";
 
 function AdminView({
   catalog,
@@ -62,6 +64,8 @@ function AdminView({
   // console.log(sessionData);
   // const [sessionCheck, setSessionCheck] = useState(false);
   // setSessionCheck(!sessionCheck);
+
+  const [isPrivateView, setIsPrivateView] = useState(false);
 
   useEffect(
     function () {
@@ -141,7 +145,7 @@ function AdminView({
         setProductDescription={setProductDescription}
       />
       <main style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
-        <Sidebar
+        <AdminSidebar
           categoryList={categoryList}
           setCategoryList={setCategoryList}
           catalog={catalog}
@@ -168,32 +172,38 @@ function AdminView({
           setSearchClick={setSearchClick}
           searchResult={searchResult}
           setSearchResult={setSearchResult}
+          isPrivateView={isPrivateView}
+          setIsPrivateView={setIsPrivateView}
         />
-        <CatalogList
-          catalog={catalog}
-          setCatalog={setCatalog}
-          catalogUnfiltered={catalogUnfiltered}
-          setCatalogUnfiltered={setCatalogUnfiltered}
-          catalogFilterView={catalogFilterView}
-          setCatalogFilterView={setCatalogFilterView}
-          catalogFilterRerender={catalogFilterRerender}
-          setCatalogFilterRerender={setCatalogFilterRerender}
-          catalogFilterTarget={catalogFilterTarget}
-          setCatalogFilterTarget={setCatalogFilterTarget}
-          searchClick={searchClick}
-          setSearchClick={setSearchClick}
-          searchInput={searchInput}
-          setSearchInput={setSearchInput}
-          allCheck={allCheck}
-          setAllCheck={setAllCheck}
-          categoryList={categoryList}
-          setCategoryList={setCategoryList}
-          setAlphabetCheck={setAlphabetCheck}
-          setRecentCheck={setRecentCheck}
-          setPriceCheck={setPriceCheck}
-          fetchData={fetchData}
-          setFetchData={setFetchData}
-        />
+        {isPrivateView ? (
+          <PrivateList />
+        ) : (
+          <CatalogList
+            catalog={catalog}
+            setCatalog={setCatalog}
+            catalogUnfiltered={catalogUnfiltered}
+            setCatalogUnfiltered={setCatalogUnfiltered}
+            catalogFilterView={catalogFilterView}
+            setCatalogFilterView={setCatalogFilterView}
+            catalogFilterRerender={catalogFilterRerender}
+            setCatalogFilterRerender={setCatalogFilterRerender}
+            catalogFilterTarget={catalogFilterTarget}
+            setCatalogFilterTarget={setCatalogFilterTarget}
+            searchClick={searchClick}
+            setSearchClick={setSearchClick}
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+            allCheck={allCheck}
+            setAllCheck={setAllCheck}
+            categoryList={categoryList}
+            setCategoryList={setCategoryList}
+            setAlphabetCheck={setAlphabetCheck}
+            setRecentCheck={setRecentCheck}
+            setPriceCheck={setPriceCheck}
+            fetchData={fetchData}
+            setFetchData={setFetchData}
+          />
+        )}
       </main>
     </>
   );

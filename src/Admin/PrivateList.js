@@ -15,16 +15,24 @@ function PrivateList() {
     getPrivateList();
   }, []);
 
-  if (privateList === undefined) {
+  if (privateList[0] === undefined) {
     return <h1>Loading private list...</h1>;
   }
 
   return (
     <>
-      <h2>Private/Archived/Pending List</h2>
-      {privateList.map((product) => (
-        <CatalogCell product={product} />
-      ))}
+      {/* <h2>Private/Archived/Pending List</h2> */}
+      <section
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr",
+          backgroundColor: "lightgray",
+        }}
+      >
+        {privateList.map((product) => (
+          <CatalogCell product={product} />
+        ))}
+      </section>
     </>
   );
 }

@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import supabase from "./supabase";
-import { useCart } from "./Cart/CartWrapper";
-import { useAdminAuth } from "./Auth/AuthWrapper";
+// import supabase from "./supabase";
+import supabase from "../supabase";
+// import { useCart } from "./Cart/CartWrapper";
+import { useAdminAuth } from "../Auth/AuthWrapper";
 
-function Product({
+function PrivateProduct({
   catalog,
   setCatalog,
   fetchData,
@@ -12,44 +13,38 @@ function Product({
   productRerender,
   setProductRerender,
 }) {
-  const { cart, setCart } = useCart();
-  // const { privateList, setPrivateList } = useAdminAuth();
+  //   const { cart, setCart } = useCart();
+  const { privateList, setPrivateList } = useAdminAuth();
 
   const [selectedProduct, setSelectedProduct] = useState();
   // const [productRerender, setProductRerender] = useState(false);
-  const { id } = useParams();
-  // console.log("useParams id:", id);
+  const [checkedSelectedPdt, setCheckedSelectedPdt] = useState(false);
 
-  useEffect(function () {
-    async function getCatalog() {
-      const { data: Catalog, error } = await supabase
-        .from("CatalogList")
-        .select("*");
-      setCatalog(Catalog);
-      // console.log(CatalogList);
+  useEffect(() => {
+    async function getPrivateList() {
+      const { data, error } = await supabase.from("PrivateList").select("*");
+      console.log("privateList:", data);
+      setPrivateList(data);
     }
-    getCatalog();
+    getPrivateList();
   }, []);
 
   useEffect(
     function () {
-      function getProduct() {
-        let selectedProduct = catalog.filter((product) =>
+      function getPrivateProduct() {
+        let selectedProduct = privateList.filter((product) =>
           product.productTitle === id ? product : null
         )[0];
         setSelectedProduct(selectedProduct);
-        // console.log("catalog", catalog);
-        // console.log("selectedProduct", selectedProduct);
-
-        // } else {
-        //   console.log("There has been an error fetching product details");
-        //   alert("There has been an error fetching product details");
-        // }
+        console.log("privateList", privateList);
+        console.log("selectedProduct", selectedProduct);
       }
-      getProduct();
+      getPrivateProduct();
     },
     [productRerender]
   );
+
+  const { id } = useParams();
 
   // console.log("selectedproduct:", selectedProduct);
   // console.log("catalog:", catalog);
@@ -60,23 +55,18 @@ function Product({
   // as the components tend to render before the data is fetched from supabase, an error will occur complaining that product details are undefined.
   // thus, this if condition forces the components to wait for the data to be fetched from supabase before rendering,
   // successfully loading the product details.
-
-  if (catalog[0] === undefined) {
+  if (privateList[0] === undefined) {
     return <h1>Still loading...</h1>;
   } else {
+    // if (selectedProduct === undefined && checkedSelectedPdt === false) {
     if (selectedProduct === undefined) {
-      setSelectedProduct(
-        catalog.filter((product) =>
-          product.productTitle === id ? product : null
-        )[0]
-      );
-      // } else {
-
-      //   } else {
-      //     console.log("There has been an error fetching product details (1)");
-      //     alert("There has been an error fetching product details(1)");
-      //   }
-
+      // setProductRerender(!productRerender);
+      // setSelectedProduct(
+      //   privateList.filter((product) =>
+      //     product.productTitle === id ? product : null
+      //   )[0]
+      // );
+      // setCheckedSelectedPdt(!checkedSelectedPdt);
       return <h1>Still loading selectedproduct...</h1>;
     }
   }
@@ -113,14 +103,14 @@ function Product({
             Enquire via Whatsapp
           </a>
         </button>
-        <button>Buy Now (Not working yet)</button>
+        {/* <button>Buy Now (Not working yet)</button>
         <button onClick={() => setCart([...cart, selectedProduct])}>
           Add to cart (Early Build)
-        </button>
+        </button> */}
         <h2>Recommended products: (coming soon)</h2>
       </div>
     </>
   );
 }
 
-export default Product;
+export default PrivateProduct;

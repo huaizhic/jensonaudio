@@ -8,6 +8,8 @@ import ProductEdit from "../Admin/AdminTools/ProductEdit";
 import Login from "./LoginPage";
 import Header from "../Header";
 import PrivateList from "../Admin/PrivateList";
+import PrivateProduct from "../Admin/PrivateProduct";
+import ProductWrapper from "./ProductWrapper";
 
 const AuthContext = createContext("");
 export const useAdminAuth = () => useContext(AuthContext);
@@ -67,7 +69,7 @@ export const AuthWrapper = ({
 
   const [productRerender, setProductRerender] = useState(false);
 
-  const [privateList, setPrivateList] = useState(undefined);
+  const [privateList, setPrivateList] = useState([]);
 
   // useEffect(async () => {
   //   const { data: session, error } = await supabase.auth.getSession();
@@ -215,7 +217,7 @@ export const AuthWrapper = ({
                   user={user}
                   setUser={setUser}
                 />
-                <PrivateList />
+                {/* <PrivateList /> */}
               </>
             }
           ></Route>
@@ -223,7 +225,8 @@ export const AuthWrapper = ({
             path="product/:id"
             element={
               <>
-                <Product
+                {/* implement a condition to display either Product or PrivateProduct */}
+                <ProductWrapper
                   catalog={catalog}
                   setCatalog={setCatalog}
                   fetchData={fetchData}
@@ -231,6 +234,18 @@ export const AuthWrapper = ({
                   productRerender={productRerender}
                   setProductRerender={setProductRerender}
                 />
+                {/* <Product
+                  catalog={catalog}
+                  setCatalog={setCatalog}
+                  fetchData={fetchData}
+                  setFetchData={setFetchData}
+                  productRerender={productRerender}
+                  setProductRerender={setProductRerender}
+                />
+                <PrivateProduct
+                  productRerender={productRerender}
+                  setProductRerender={setProductRerender}
+                /> */}
                 <br></br>
                 <br></br>
                 <ProductEdit

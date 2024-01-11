@@ -67,7 +67,7 @@ function ProductEdit({
   // console.log(selectedProduct);
 
   // catalog data not fetched in time yet
-  if (catalog[0] === undefined && privateList === undefined) {
+  if (catalog[0] === undefined || privateList[0] === undefined) {
     return <h1>ProductEdit Still loading...</h1>;
   } else {
     let productPublic = catalog.some((product) => product.productTitle === id);
@@ -85,6 +85,10 @@ function ProductEdit({
     } else {
       console.log("ProductEdit: error fetching product details");
       alert("ProductEdit: error fetching product details");
+      console.log("product id:", id);
+      console.log("catalog: ", catalog);
+      console.log("privateList: ", privateList);
+      console.log("privateList[0]: ", privateList[0]);
     }
 
     if (
@@ -92,6 +96,7 @@ function ProductEdit({
       inputCategory === "unset" ||
       inputDesc === "unset"
     ) {
+      // console.log(selectedProduct);
       fillInputs(selectedProduct);
     }
     // console.log("selectedProduct:", selectedProduct);

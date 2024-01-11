@@ -37,7 +37,11 @@ function LoginPage({ user, setUser }) {
           // if there is an existing session from supabase
         } else if (session.session !== null) {
           setUser({ ...user, isAuthenticated: true });
-          navigate(authRouteRedirect);
+          if (authRouteRedirect === "") {
+            navigate("/");
+          } else {
+            navigate(authRouteRedirect);
+          }
         } else {
           // to catch any other edge cases
           alert(
