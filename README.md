@@ -11,4 +11,5 @@ Dynamic UTF-8 string generator from PayNow UEN repository by ThunderQuote (https
 
 QR Code generator from repository UTF-8 string by Stevinz (https://github.com/stevinz/qrim)
 
+Javascript localStorage for shopping cart (https://blog.logrocket.com/localstorage-javascript-complete-guide/)
 
