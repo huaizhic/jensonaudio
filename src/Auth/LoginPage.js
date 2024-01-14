@@ -38,7 +38,7 @@ function LoginPage({ user, setUser }) {
         } else if (session.session !== null) {
           setUser({ ...user, isAuthenticated: true });
           if (authRouteRedirect === "") {
-            navigate("/");
+            navigate("/admin");
           } else {
             navigate(authRouteRedirect);
           }

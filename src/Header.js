@@ -4,10 +4,13 @@ import CartList from "./Cart/CartList";
 
 const headerButtonArray = [
   { Name: "Home", RoutingName: "" },
-  { Name: "Brands", RoutingName: "brands" },
+  { Name: "Category", RoutingName: "brands" },
   { Name: "About", RoutingName: "about" },
-  { Name: "Contact", RoutingName: "contact" },
+  // { Name: "Contact", RoutingName: "contact" },
   { Name: "Admin", RoutingName: "admin" },
+  { Name: "Payment (for testing)", RoutingName: "payment" },
+  { Name: "Checkout (for testing)", RoutingName: "checkout" },
+  { Name: "Order sent (for testing)", RoutingName: "ordersent" },
 ];
 
 function Header({

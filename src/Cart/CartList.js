@@ -1,7 +1,23 @@
+import { useNavigate } from "react-router-dom";
 import { useCart } from "./CartWrapper";
+import { useEffect } from "react";
 
 function CartList() {
-  const { cart, setCart, cartOpen, setCartOpen } = useCart();
+  const {
+    cart,
+    setCart,
+    cartOpen,
+    setCartOpen,
+    cartTotalPrice,
+    setCartTotalPrice,
+    removeFromCart,
+    calculateCartValue,
+    inputQuantity,
+    setInputQuantity,
+  } = useCart();
+
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="cart">
@@ -20,12 +36,64 @@ function CartList() {
             </svg>
           </button>
         </div>
-        {cart.map((product) => (
-          <>
-            <h2>{product.productTitle}</h2>
-            <span>{product.productPrice}</span>
-          </>
-        ))}
+        <div className="cartProductsArea">
+          {cart.length === 0 ? (
+            <span>There are no items in cart. Add one now!</span>
+          ) : (
+            cart.map((product) => (
+              <>
+                <div className="cartProduct">
+                  <div className="cartTitlePrice">
+                    <h2>{product.productTitle}</h2>
+                    <span>{product.productPrice}</span>
+                  </div>
+                  {/* <p>
+                    Quantity:
+                    <input
+                      type="number"
+                      value={inputQuantity}
+                      // onChange={(e) => {
+                      //   // setTempQuantity(e.target.valueAsNumber);
+
+                      //   let tempQuantity = e.target.valueAsNumber;
+                      //   console.log(tempQuantity);
+
+                      //   if (tempQuantity > inputQuantity) {
+                      //     // console.log(inputQuantity);
+                      //     // meaning increment
+                      //     if (tempQuantity >= selectedProduct.quantity) {
+                      //       setInputQuantity(selectedProduct.quantity);
+                      //     } else {
+                      //       setInputQuantity(e.target.valueAsNumber);
+                      //     }
+                      //   } else if (tempQuantity < inputQuantity) {
+                      //     // decrement
+                      //     if (tempQuantity <= 1) {
+                      //       setInputQuantity(1);
+                      //     } else {
+                      //       setInputQuantity(e.target.valueAsNumber);
+                      //     }
+                      //   }
+                      // }}
+                    ></input>
+                  </p> */}
+                  <button onClick={() => removeFromCart(product)}>
+                    Remove
+                  </button>
+                </div>
+              </>
+            ))
+          )}
+        </div>
+        <h3>Total Price: {cartTotalPrice}</h3>
+        <button
+          onClick={() => {
+            navigate("/checkout");
+            setCartOpen(!cartOpen);
+          }}
+        >
+          Checkout
+        </button>
       </div>
     </>
   );

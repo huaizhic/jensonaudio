@@ -1118,7 +1118,7 @@ class QRCode {
     if (typeof params === "string") params = { text: params };
     if (typeof params === "object") Object.assign(this.#options, params);
 
-    this.#element.title = this.#options.text;
+    // this.#element.title = this.#options.text;
     this.#canvas.width = this.#options.size;
     this.#canvas.height = this.#options.size;
     this.#image.style.opacity = this.#options.opacity;

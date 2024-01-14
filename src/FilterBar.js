@@ -225,8 +225,8 @@ function FilterBar({
           </li>
         ))}
       </ul>
-      <span> Filter by Brand (coming soon)</span>
-      <span> Filter by Price Range (coming soon)</span>
+      {/* <span> Filter by Brand (coming soon)</span>
+      <span> Filter by Price Range (coming soon)</span> */}
     </>
   );
 }

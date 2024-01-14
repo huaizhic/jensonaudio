@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import supabase from "./supabase";
 import { useCart } from "./Cart/CartWrapper";
@@ -12,7 +12,8 @@ function Product({
   productRerender,
   setProductRerender,
 }) {
-  const { cart, setCart } = useCart();
+  const { cart, setCart, addToCart, inputQuantity, setInputQuantity } =
+    useCart();
   // const { privateList, setPrivateList } = useAdminAuth();
 
   const [selectedProduct, setSelectedProduct] = useState();
@@ -20,6 +21,9 @@ function Product({
   const { id } = useParams();
   // console.log("useParams id:", id);
   const [isProductLoaded, setIsProductLoaded] = useState(false);
+  const navigate = useNavigate();
+  // const [inputQuantity, setInputQuantity] = useState(1);
+  // const [tempQuantity, setTempQuantity] = useState(0);
 
   useEffect(function () {
     async function getCatalog() {
@@ -71,7 +75,23 @@ function Product({
           product.productTitle === id ? product : null
         )[0]
       );
+
       setIsProductLoaded(!isProductLoaded);
+
+      // if (selectedProduct !== undefined && isProductLoaded === true) {
+      //   // for debugging purposes
+      //   // setSelectedProduct({ ...selectedProduct, quantity: 3 });
+
+      //   console.log();
+      //   if (selectedProduct.quantity >= 1) {
+      //     // setInputQuantity(1);
+      //     selectedProduct = { ...selectedProduct, inputQuantity: 1 };
+      //     console.log("oi");
+      //   } else {
+      //     // setInputQuantity(0);
+      //     selectedProduct = { ...selectedProduct, inputQuantity: 0 };
+      //   }
+      // }
       // } else {
 
       //   } else {
@@ -110,14 +130,52 @@ function Product({
         ) : (
           <p>Product Description: {selectedProduct.productDescription} </p>
         )}
+        {/* <p>
+          Quantity:
+          <input
+            type="number"
+            value={selectedProduct.inputQuantity}
+            onChange={(e) => {
+              // setTempQuantity(e.target.valueAsNumber);
+
+              let tempQuantity = e.target.valueAsNumber;
+              console.log(tempQuantity);
+
+              if (tempQuantity > inputQuantity) {
+                // console.log(inputQuantity);
+                // meaning increment
+                if (tempQuantity >= selectedProduct.quantity) {
+                  setInputQuantity(selectedProduct.quantity);
+                } else {
+                  setInputQuantity(e.target.valueAsNumber);
+                }
+              } else if (tempQuantity < inputQuantity) {
+                // decrement
+                if (tempQuantity <= 1) {
+                  setInputQuantity(1);
+                } else {
+                  setInputQuantity(e.target.valueAsNumber);
+                }
+              }
+            }}
+          ></input>
+        </p> */}
+
         <button>
           <a href="https://wa.me/6596612172" target="_blank">
             Enquire via Whatsapp
           </a>
         </button>
-        <button>Buy Now (Not working yet)</button>
-        <button onClick={() => setCart([...cart, selectedProduct])}>
-          Add to cart (Early Build)
+        <button onClick={() => navigate("/checkout")}>
+          Buy Now (Not working yet)
+        </button>
+        <button
+          onClick={() =>
+            // setCart([...cart, selectedProduct])
+            addToCart(selectedProduct)
+          }
+        >
+          Add to cart
         </button>
         <h2>Recommended products: (coming soon)</h2>
       </div>

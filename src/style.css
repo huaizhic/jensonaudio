@@ -129,3 +129,18 @@
   flex-direction: column;
   padding: 2%;
 }
+
+.cartProductsArea {
+  height: 65%;
+  overflow: scroll;
+}
+
+.cartTitlePrice {
+  display: flex;
+  flex-direction: column;
+}
+
+.cartProduct {
+  display: flex;
+  justify-content: space-between;
+}
