@@ -12,6 +12,7 @@ function CartList() {
     setCartTotalPrice,
     removeFromCart,
     calculateCartValue,
+    setCalculateCartValue,
     inputQuantity,
     setInputQuantity,
   } = useCart();
@@ -47,36 +48,139 @@ function CartList() {
                     <h2>{product.productTitle}</h2>
                     <span>{product.productPrice}</span>
                   </div>
-                  {/* <p>
+                  <p>
                     Quantity:
                     <input
                       type="number"
-                      value={inputQuantity}
-                      // onChange={(e) => {
-                      //   // setTempQuantity(e.target.valueAsNumber);
+                      value={product.inputQuantity}
+                      onChange={(e) => {
+                        // setTempQuantity(e.target.valueAsNumber);
+                        let tempCart = [];
+                        let tempQuantity = e.target.valueAsNumber;
+                        console.log(
+                          "product.inputQuantity:",
+                          product.inputQuantity
+                        );
+                        console.log("tempQuantity:", tempQuantity);
 
-                      //   let tempQuantity = e.target.valueAsNumber;
-                      //   console.log(tempQuantity);
+                        if (tempQuantity > product.inputQuantity) {
+                          // meaning increment
+                          if (tempQuantity >= product.quantity) {
+                            tempCart = cart;
+                            tempCart.forEach((productParam, index) =>
+                              productParam.id === product.id
+                                ? (tempCart[index].inputQuantity =
+                                    product.quantity)
+                                : productParam
+                            );
+                            localStorage.setItem(
+                              "cart",
+                              JSON.stringify(tempCart)
+                            );
+                            // setCart(
+                            //   cart.forEach((productParam) =>
+                            //     productParam.id === product.id
+                            //       ? {
+                            //           ...product,
+                            //           inputQuantity: product.quantity,
+                            //         }
+                            //       : product
+                            //   )
+                            // );
+                            // return {
+                            //   ...product,
+                            //   inputQuantity: product.quantity,
+                            // };
+                            // setInputQuantity(product.quantity);
+                            // setCart
+                          } else {
+                            console.log(cart);
+                            tempCart = cart;
+                            tempCart.forEach((productParam, index) =>
+                              productParam.id === product.id
+                                ? (tempCart[index].inputQuantity =
+                                    e.target.valueAsNumber)
+                                : productParam
+                            );
+                            // console.log(e.target.valueAsNumber);
+                            console.log("tempCart:", tempCart);
+                            localStorage.setItem(
+                              "cart",
+                              JSON.stringify(tempCart)
+                            );
 
-                      //   if (tempQuantity > inputQuantity) {
-                      //     // console.log(inputQuantity);
-                      //     // meaning increment
-                      //     if (tempQuantity >= selectedProduct.quantity) {
-                      //       setInputQuantity(selectedProduct.quantity);
-                      //     } else {
-                      //       setInputQuantity(e.target.valueAsNumber);
-                      //     }
-                      //   } else if (tempQuantity < inputQuantity) {
-                      //     // decrement
-                      //     if (tempQuantity <= 1) {
-                      //       setInputQuantity(1);
-                      //     } else {
-                      //       setInputQuantity(e.target.valueAsNumber);
-                      //     }
-                      //   }
-                      // }}
+                            // setCart(
+                            //   cart.forEach((productParam) =>
+                            //     productParam.id === product.id
+                            //       ? {
+                            //           ...product,
+                            //           inputQuantity: e.target.valueAsNumber,
+                            //         }
+                            //       : product
+                            //   )
+                            // );
+                            // setInputQuantity(e.target.valueAsNumber);
+                          }
+                        } else if (tempQuantity < product.inputQuantity) {
+                          // decrement
+                          if (tempQuantity <= 1) {
+                            tempCart = cart;
+                            tempCart.forEach((productParam, index) =>
+                              productParam.id === product.id
+                                ? (tempCart[index].inputQuantity = 1)
+                                : productParam
+                            );
+                            localStorage.setItem(
+                              "cart",
+                              JSON.stringify(tempCart)
+                            );
+
+                            // setCart(
+                            //   cart.forEach((productParam) =>
+                            //     productParam.id === product.id
+                            //       ? {
+                            //           ...product,
+                            //           inputQuantity: 1,
+                            //         }
+                            //       : product
+                            //   )
+                            // );
+                            // setInputQuantity(1);
+                          } else {
+                            tempCart = cart;
+                            tempCart.forEach((productParam, index) =>
+                              productParam.id === product.id
+                                ? (tempCart[index].inputQuantity =
+                                    e.target.valueAsNumber)
+                                : productParam
+                            );
+                            localStorage.setItem(
+                              "cart",
+                              JSON.stringify(tempCart)
+                            );
+
+                            // setCart(
+                            //   cart.forEach((productParam) =>
+                            //     productParam.id === product.id
+                            //       ? {
+                            //           ...product,
+                            //           inputQuantity: e.target.valueAsNumber,
+                            //         }
+                            //       : product
+                            //   )
+                            // );
+                            // setInputQuantity(e.target.valueAsNumber);
+                          }
+                        }
+                        // console.log(
+                        //   "product.inputQuantity (1):",
+                        //   product.inputQuantity
+                        // );
+                        setCalculateCartValue(!calculateCartValue);
+                        // return product;
+                      }}
                     ></input>
-                  </p> */}
+                  </p>
                   <button onClick={() => removeFromCart(product)}>
                     Remove
                   </button>

@@ -116,6 +116,23 @@ export const CartWrapper = ({
               (catalogProduct) => localProduct.id === catalogProduct.id
             )[0];
             // console.log(upToDateProduct);
+
+            // check if input quantity exceeds in-stock quantity. if so, reduce input quantity to match that of in stock.
+            if (
+              localStorageCart[index].inputQuantity > upToDateProduct.quantity
+            ) {
+              localStorageCart[index] = {
+                ...localStorageCart[index],
+                inputQuantity: upToDateProduct.quantity,
+              };
+            }
+
+            // update product details EXCEPT for input quantity
+            upToDateProduct = {
+              ...upToDateProduct,
+              inputQuantity: localStorageCart[index].inputQuantity,
+            };
+
             localStorageCart[index] = upToDateProduct; // works
             // console.log(localProduct);
             // console.log(localStorageCart);
@@ -125,7 +142,7 @@ export const CartWrapper = ({
         });
         setCalculateCartValue(!calculateCartValue);
       } else if (localStorage.getItem("cart") === null) {
-        // console.log("zzz");
+        // this is if cart cannot  be found in localStorge
         localStorage.setItem("cart", JSON.stringify(cart));
         setCalculateCartValue(!calculateCartValue);
       } else {
@@ -139,7 +156,10 @@ export const CartWrapper = ({
     const determineCartPrice = () => {
       let tempPrice = 0;
       // if (cart.length !== 0) {
-      cart.forEach((product) => (tempPrice = tempPrice + product.productPrice));
+      // cart.forEach((product) => (tempPrice = tempPrice + product.productPrice));
+      cart.forEach((product) => {
+        tempPrice = tempPrice + product.productPrice * product.inputQuantity;
+      });
       // }
       setCartTotalPrice(tempPrice);
       // return tempPrice;
@@ -155,6 +175,8 @@ export const CartWrapper = ({
   }
 
   const addToCart = (selectedProduct) => {
+    // check if product is already in cart (for non-quantity version)
+    let tempCart = [];
     let doesItemAlreadyExist = false;
     cart.forEach((product) => {
       if (product.id === selectedProduct.id) {
@@ -162,9 +184,58 @@ export const CartWrapper = ({
       }
     });
 
+    // for item not in cart
     if (doesItemAlreadyExist === false) {
       setCart([...cart, selectedProduct]);
       localStorage.setItem("cart", JSON.stringify([...cart, selectedProduct]));
+    } else if (doesItemAlreadyExist === true) {
+      // for item already in cart, need to implement inputQuantity logic
+
+      // look for the item
+      let tempSelectedProduct = cart.filter(
+        (product) => product.id === selectedProduct.id
+      )[0];
+      console.log("tempSelectedProduct:", tempSelectedProduct);
+
+      // add to the existing input quantity in the shopping cart
+      // but first, check if combined quantity exceeds in stock quantity
+      if (
+        tempSelectedProduct.inputQuantity + selectedProduct.inputQuantity <=
+        tempSelectedProduct.quantity
+      ) {
+        // if combined quantity doesn't exceed in stock quantity, set inputQuantity to the added amt
+        tempSelectedProduct = {
+          ...tempSelectedProduct,
+          inputQuantity:
+            tempSelectedProduct.inputQuantity + selectedProduct.inputQuantity,
+        };
+        console.log("tempSelectedProduct:", tempSelectedProduct);
+        tempCart = cart;
+        tempCart.forEach((product, index) =>
+          product.id === tempSelectedProduct.id
+            ? (cart[index] = tempSelectedProduct)
+            : product
+        );
+        console.log("tempCart:", tempCart);
+        localStorage.setItem("cart", JSON.stringify(tempCart));
+      } else if (
+        tempSelectedProduct.inputQuantity + selectedProduct.inputQuantity >
+        tempSelectedProduct.quantity
+      ) {
+        // if combined quantity exceeds in stock amt, just set to max in stock quantity
+        tempSelectedProduct = {
+          ...tempSelectedProduct,
+          inputQuantity: tempSelectedProduct.quantity,
+        };
+        console.log("tempSelectedProduct:", tempSelectedProduct);
+        tempCart = cart;
+        tempCart.forEach((product, index) =>
+          product.id === tempSelectedProduct.id
+            ? (cart[index] = tempSelectedProduct)
+            : product
+        );
+        localStorage.setItem("cart", JSON.stringify(tempCart));
+      }
     }
 
     // setCartTotalPrice(cartTotalPrice + selectedProduct.productPrice);

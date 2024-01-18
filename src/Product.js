@@ -94,7 +94,6 @@ function Product({
       // }
       // } else {
 
-      //   } else {
       //     console.log("There has been an error fetching product details (1)");
       //     alert("There has been an error fetching product details(1)");
       //   }
@@ -130,11 +129,12 @@ function Product({
         ) : (
           <p>Product Description: {selectedProduct.productDescription} </p>
         )}
-        {/* <p>
+        <p>In stock: {selectedProduct.quantity}</p>
+        <p>
           Quantity:
           <input
             type="number"
-            value={selectedProduct.inputQuantity}
+            value={inputQuantity}
             onChange={(e) => {
               // setTempQuantity(e.target.valueAsNumber);
 
@@ -159,7 +159,7 @@ function Product({
               }
             }}
           ></input>
-        </p> */}
+        </p>
 
         <button>
           <a href="https://wa.me/6596612172" target="_blank">
@@ -172,7 +172,18 @@ function Product({
         <button
           onClick={() =>
             // setCart([...cart, selectedProduct])
-            addToCart(selectedProduct)
+            {
+              if (selectedProduct.quantity !== 0) {
+                // code written in this manner to circumvent react setState async race condition problem
+                let tempSelectedProduct = {
+                  ...selectedProduct,
+                  inputQuantity: inputQuantity,
+                };
+                setSelectedProduct(tempSelectedProduct);
+                addToCart(tempSelectedProduct);
+                setInputQuantity(1);
+              }
+            }
           }
         >
           Add to cart

@@ -72,7 +72,16 @@ function Payment() {
         order. This helps to finetune and lock the price and payment reference
         for easier tracking.
       </p>
-      <button onClick={() => navigate("/ordersent")}>
+      <button
+        onClick={() => {
+          const response = window.confirm(
+            "Please confirm payment for the product(s)"
+          );
+          if (response) {
+            navigate("/ordersent");
+          }
+        }}
+      >
         Once paid, PLEASE CLICK HERE to finish order
       </button>
       <br></br>

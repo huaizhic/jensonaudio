@@ -121,7 +121,8 @@
 .cartTitle {
   display: flex;
   flex-direction: row;
-  gap: 45%;
+  /* gap: 45%; */
+  justify-content: space-between;
 }
 
 .checkoutInputs {
