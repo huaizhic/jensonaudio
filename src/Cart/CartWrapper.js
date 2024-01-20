@@ -12,6 +12,7 @@ import Checkout from "./Checkout";
 import Payment from "./Payment";
 import OrderSent from "./OrderSent";
 import supabase from "../supabase";
+import { SearchBar } from "../SearchBar";
 
 const CartContext = createContext("");
 export const useCart = () => useContext(CartContext);
@@ -61,6 +62,10 @@ export const CartWrapper = ({
   setUser,
   cartOpen,
   setCartOpen,
+  searchBarOpen,
+  setSearchBarOpen,
+  productRerender,
+  setProductRerender,
 }) => {
   const [cart, setCart] = useState([]);
   // const [cartOpen, setCartOpen] = useState(true);
@@ -273,6 +278,15 @@ export const CartWrapper = ({
     >
       <>
         {/* children components here */}
+        {searchBarOpen ? (
+          <SearchBar
+            searchBarOpen={searchBarOpen}
+            setSearchBarOpen={setSearchBarOpen}
+            catalog={catalog}
+            productRerender={productRerender}
+            setProductRerender={setProductRerender}
+          />
+        ) : null}
         {cartOpen ? <CartList /> : null}
         <Routes>
           <Route
@@ -349,12 +363,15 @@ export const CartWrapper = ({
                 setCatalog={setCatalog}
                 fetchData={fetchData}
                 setFetchData={setFetchData}
+                productRerender={productRerender}
+                setProductRerender={setProductRerender}
               />
             }
           />
           <Route path="checkout" element={<Checkout />} />
           <Route path="payment" element={<Payment />} />
           <Route path="ordersent" element={<OrderSent />} />
+          {/* <Route path="filter" element={}/> */}
           <Route path="/*" element={<ErrorPage />} />
         </Routes>
         <Outlet />

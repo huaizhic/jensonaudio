@@ -60,6 +60,8 @@ export const AuthWrapper = ({
   setFetchData,
   user,
   setUser,
+  productRerender,
+  setProductRerender
 }) => {
   //   const [user, setUser] = useState({ name: "", isAuthenticated: false });
   const [sessionData, setSessionData] = useState({ beforeFetchData: "true" });
@@ -67,7 +69,7 @@ export const AuthWrapper = ({
   const [sessionCheck, setSessionCheck] = useState(false);
   const [authRouteRedirect, setAuthRouteRedirect] = useState(""); // depending on which route is accessed by user fitst, sets auth route to redirect to after login
 
-  const [productRerender, setProductRerender] = useState(false);
+  // const [productRerender, setProductRerender] = useState(false);
 
   const [privateList, setPrivateList] = useState([]);
 

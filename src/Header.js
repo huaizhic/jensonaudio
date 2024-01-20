@@ -36,6 +36,8 @@ function Header({
   setSearchResult,
   cartOpen,
   setCartOpen,
+  searchBarOpen,
+  setSearchBarOpen,
 }) {
   // const [searchInput, setSearchInput] = useState("");
   const [cartButton, setCartButton] = useState(false);
@@ -94,11 +96,14 @@ function Header({
     <>
       <header
         style={{
+          position: "fixed",
           backgroundColor: "lightsteelblue",
+          top: "0",
           height: "40px",
+          width: "100%",
           display: "flex",
           justifyContent: "Center",
-          gap: "100px",
+          // gap: "100px",
         }}
       >
         <img
@@ -112,7 +117,7 @@ function Header({
             <HeaderButton button={button} />
           ))}
         </div>
-        <form onSubmit={(e) => handleSubmit(e)}>
+        {/* <form onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
             placeholder="Search product (to revamp to sidebar)"
@@ -120,7 +125,13 @@ function Header({
             onChange={(e) => handleChange(e)}
           ></input>
           <button>Search</button>
-        </form>
+        </form> */}
+        <button onClick={() => setSearchBarOpen(!searchBarOpen)}>
+          <img
+            src="https://www.svgrepo.com/show/7109/search.svg"
+            height="20"
+          ></img>
+        </button>
         <button onClick={() => setCartOpen(!cartOpen)}>
           <img
             src="https://uxwing.com/wp-content/themes/uxwing/download/e-commerce-currency-shopping/shopping-cart-icon.png"

@@ -52,6 +52,9 @@ function App() {
   const [user, setUser] = useState({ name: "", isAuthenticated: false });
 
   const [cartOpen, setCartOpen] = useState(false);
+  const [searchBarOpen, setSearchBarOpen] = useState(false);
+
+  const [productRerender, setProductRerender] = useState(false);
 
   // for fetching categoryList from supabase
   useEffect(function () {
@@ -90,6 +93,8 @@ function App() {
         setSearchResult={setSearchResult}
         cartOpen={cartOpen}
         setCartOpen={setCartOpen}
+        searchBarOpen={searchBarOpen}
+        setSearchBarOpen={setSearchBarOpen}
       />
       {/* <CartList /> */}
       <Routes>
@@ -141,6 +146,10 @@ function App() {
               setUser={setUser}
               cartOpen={cartOpen}
               setCartOpen={setCartOpen}
+              searchBarOpen={searchBarOpen}
+              setSearchBarOpen={setSearchBarOpen}
+              productRerender={productRerender}
+              setProductRerender={setProductRerender}
             />
           }
         ></Route>
@@ -192,6 +201,8 @@ function App() {
               setFetchData={setFetchData}
               user={user}
               setUser={setUser}
+              productRerender={productRerender}
+              setProductRerender={setProductRerender}
             />
           }
         ></Route>
