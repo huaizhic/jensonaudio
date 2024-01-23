@@ -12,24 +12,37 @@ export const searchLogic = (searchInput, catalog) => {
   let searchResultArray = [];
 
   for (let i = 0; i < searchInputArray.length; i++) {
-    searchResultArray = catalog.filter(
+    // results from searching a single keyword in the entire string, seperated by spacing
+    let indivWordSearch = catalog.filter(
       (product) =>
         product.productTitle.toLowerCase().indexOf(searchInputArray[i]) !== -1
     );
 
-    // console.log(temp);
+    // add a condition to not add if product alr exist in the result array
+    indivWordSearch.forEach((product, index) => {
+      let gotDuplicate = searchResultArray.some(
+        (productParam) => productParam.id === product.id
+      );
 
-    // searchResultArray = [
-    //   ...searchResultArray,
-    //   // generate result array of objects, filtered from catalog array
-    //   // search based on substring (non-case sensitive)
-    //   ...catalog.filter(
-    //     (product) =>
-    //       product.productTitle.toLowerCase().indexOf(searchInputArray[i]) !== -1
-    //     // as long as it can return a positive index at which first character of substring is found, there is a match.
-    //     // originally intended to use product.productTitle.toLowerCase().includes(searchInputLowerCase), but used above code instead to support older broswers
-    //   ),
-    // ];
+      if (gotDuplicate) {
+        indivWordSearch[index] = {
+          ...indivWordSearch[index],
+          isDuplicate: true,
+        };
+      } else {
+        indivWordSearch[index] = {
+          ...indivWordSearch[index],
+          isDuplicate: false,
+        };
+      }
+    });
+
+    indivWordSearch = indivWordSearch.filter(
+      (product) => product.isDuplicate === false
+    );
+
+    // accumulate individual keyword result to total search result array
+    searchResultArray = [...searchResultArray, ...indivWordSearch];
   }
 
   return searchResultArray;

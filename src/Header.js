@@ -96,10 +96,10 @@ function Header({
     <>
       <header
         style={{
-          position: "fixed",
+          position: "sticky",
           backgroundColor: "lightsteelblue",
           top: "0",
-          height: "40px",
+          height: "45px",
           width: "100%",
           display: "flex",
           justifyContent: "Center",
